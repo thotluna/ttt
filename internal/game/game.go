@@ -23,10 +23,9 @@ func NewGame(io view.IO) Game {
 }
 func (g *Game) Play() {
 	for {
-		_, player := g.turn.GetTurn()
+		_, symbolPlayer := g.turn.GetTurn()
 		g.io.PrintBoard(g.board.GetBoard())
-		g.io.PrintMessage(FormatPlayerTurn(player))
-		g.io.PrintMessage(FormatPlayerTurn(player))
+		g.io.PrintMessage(FormatPlayerTurn(symbolPlayer))
 
 		row, col, err := g.readInput()
 		if err != nil {
@@ -34,27 +33,24 @@ func (g *Game) Play() {
 			continue
 		}
 
-		token := NewToken(player, row, col)
+		token := NewToken(symbolPlayer, row, col)
 		if err := g.board.PlaceToken(token); err != nil {
 			if Is(err, ErrPositionOccupied) || Is(err, ErrOutOfBounds) {
 				g.io.PrintLine("Error: " + err.Error())
 			} else {
 				g.io.PrintLine(FormatUnexpectedError(err))
-				g.io.PrintLine(FormatUnexpectedError(err))
 			}
 			continue
 		}
 
-		if g.board.CheckWin(player) {
+		if g.board.CheckWin(symbolPlayer) {
 			g.io.PrintBoard(g.board.GetBoard())
-			g.io.PrintLine(fmt.Sprintf(MsgPlayerWins, player))
-			g.io.PrintLine(fmt.Sprintf(MsgPlayerWins, player))
+			g.io.PrintLine(fmt.Sprintf(MsgPlayerWins, symbolPlayer))
 			return
 		}
 
 		if g.board.FullBoard() {
 			g.io.PrintBoard(g.board.GetBoard())
-			g.io.PrintLine(MsgGameDraw)
 			g.io.PrintLine(MsgGameDraw)
 			return
 		}
