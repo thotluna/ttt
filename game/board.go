@@ -16,8 +16,19 @@ func NewBoard() *Board {
 	}
 }
 
-func (b *Board) PlaceToken(token Token) {
+func (b *Board) PlaceToken(token Token) error {
+	if token.row < 0 || token.row >= 3 || token.col < 0 || token.col >= 3 {
+		return NewGameError(ErrOutOfBounds,
+			fmt.Sprintf("position (%d,%d) is out of bounds", token.row, token.col))
+	}
+
+	if b.board[token.row][token.col] != '-' {
+		return NewGameError(ErrPositionOccupied,
+			fmt.Sprintf("position (%d,%d) is already taken", token.row, token.col))
+	}
+
 	b.board[token.row][token.col] = token.GetSymbol()
+	return nil
 }
 
 func (b *Board) FullBoard() bool {
