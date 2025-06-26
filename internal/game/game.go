@@ -5,10 +5,6 @@ import (
 	"strconv"
 	"strings"
 
-<<<<<<< HEAD
-	"github.com/thotluna/ttt/internal/constans"
-=======
->>>>>>> 59d54d0 (refactor: reorganize project structure)
 	"github.com/thotluna/ttt/internal/view"
 )
 
@@ -30,6 +26,7 @@ func (g *Game) Play() {
 		_, player := g.turn.GetTurn()
 		g.io.PrintBoard(g.board.GetBoard())
 		g.io.PrintMessage(FormatPlayerTurn(player))
+		g.io.PrintMessage(FormatPlayerTurn(player))
 
 		row, col, err := g.readInput()
 		if err != nil {
@@ -43,6 +40,7 @@ func (g *Game) Play() {
 				g.io.PrintLine("Error: " + err.Error())
 			} else {
 				g.io.PrintLine(FormatUnexpectedError(err))
+				g.io.PrintLine(FormatUnexpectedError(err))
 			}
 			continue
 		}
@@ -50,11 +48,13 @@ func (g *Game) Play() {
 		if g.board.CheckWin(player) {
 			g.io.PrintBoard(g.board.GetBoard())
 			g.io.PrintLine(fmt.Sprintf(MsgPlayerWins, player))
+			g.io.PrintLine(fmt.Sprintf(MsgPlayerWins, player))
 			return
 		}
 
 		if g.board.FullBoard() {
 			g.io.PrintBoard(g.board.GetBoard())
+			g.io.PrintLine(MsgGameDraw)
 			g.io.PrintLine(MsgGameDraw)
 			return
 		}
@@ -71,19 +71,23 @@ func (g *Game) readInput() (int, int, error) {
 	parts := strings.Split(input, ".")
 	if len(parts) != 2 {
 		return 0, 0, NewGameError(ErrInvalidInput, MsgInvalidFormat)
+		return 0, 0, NewGameError(ErrInvalidInput, MsgInvalidFormat)
 	}
 
 	row, err := strconv.Atoi(strings.TrimSpace(parts[0]))
 	if err != nil {
+		return 0, 0, NewGameError(ErrInvalidInput, MsgRowMustBeNumber)
 		return 0, 0, NewGameError(ErrInvalidInput, MsgRowMustBeNumber)
 	}
 
 	col, err := strconv.Atoi(strings.TrimSpace(parts[1]))
 	if err != nil {
 		return 0, 0, NewGameError(ErrInvalidInput, MsgColMustBeNumber)
+		return 0, 0, NewGameError(ErrInvalidInput, MsgColMustBeNumber)
 	}
 
 	if row < 0 || row > 2 || col < 0 || col > 2 {
+		return 0, 0, NewGameError(ErrOutOfBounds, MsgOutOfBounds)
 		return 0, 0, NewGameError(ErrOutOfBounds, MsgOutOfBounds)
 	}
 

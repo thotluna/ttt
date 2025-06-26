@@ -5,11 +5,6 @@ import (
 	"fmt"
 	"os"
 	"strings"
-<<<<<<< HEAD
-
-	"github.com/thotluna/ttt/internal/constans"
-=======
->>>>>>> 59d54d0 (refactor: reorganize project structure)
 )
 
 var _ IO = (*IOTerminal)(nil)
