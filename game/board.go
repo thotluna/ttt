@@ -16,6 +16,10 @@ func NewBoard() *Board {
 	}
 }
 
+func (b *Board) GetBoard() [3][3]rune {
+	return b.board
+}
+
 func (b *Board) PlaceToken(token Token) error {
 	if token.row < 0 || token.row >= 3 || token.col < 0 || token.col >= 3 {
 		return NewGameError(ErrOutOfBounds,

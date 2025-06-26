@@ -1,60 +1,57 @@
 package game
 
 import (
-	"bufio"
-	"fmt"
-	"os"
 	"strconv"
 	"strings"
+
+	"github.com/thotluna/ttt/view"
 )
 
 type Game struct {
 	turn  Turn
 	board *Board
+	io    view.IO
 }
 
-func NewGame() Game {
+func NewGame(io view.IO) Game {
 	return Game{
 		turn:  NewTurn(),
 		board: NewBoard(),
+		io:    io,
 	}
 }
 func (g *Game) Play() {
 	for {
-		_, rune := g.turn.GetTurn()
-		g.board.PrintBoard()
-		fmt.Printf("Player %c turn\n", rune)
-		var row, col int
-		var err error
-		for {
-			row, col, err = g.readInput()
-			if err != nil {
-				fmt.Println("Error:", err)
-				continue
-			}
-			break
+		_, player := g.turn.GetTurn()
+		g.io.PrintBoard(g.board.board)
+		g.io.PrintMessage("Player " + string(player) + " turn")
+
+		row, col, err := g.readInput()
+		if err != nil {
+			g.io.PrintLine("Error: " + err.Error())
+			continue
 		}
 
-		token := NewToken(rune, row, col)
+		token := NewToken(player, row, col)
 		if err := g.board.PlaceToken(token); err != nil {
 			if Is(err, ErrPositionOccupied) || Is(err, ErrOutOfBounds) {
-				fmt.Println("Error:", err)
+				g.io.PrintLine("Error: " + err.Error())
 			} else {
-				fmt.Println("Unexpected error:", err)
+				g.io.PrintLine("Unexpected error: " + err.Error())
 			}
 			continue
 		}
 
-		if g.board.CheckWin(rune) {
-			g.board.PrintBoard()
-			fmt.Printf("Player %c wins!\n", rune)
-			os.Exit(0)
+		if g.board.CheckWin(player) {
+			g.io.PrintBoard(g.board.board)
+			g.io.PrintWin(player)
+			return
 		}
 
 		if g.board.FullBoard() {
-			g.board.PrintBoard()
-			fmt.Println("Draw!")
-			os.Exit(0)
+			g.io.PrintBoard(g.board.board)
+			g.io.PrintDraw()
+			return
 		}
 
 		g.turn.TurnChange()
@@ -64,14 +61,7 @@ func (g *Game) Play() {
 }
 
 func (g *Game) readInput() (int, int, error) {
-	reader := bufio.NewReader(os.Stdin)
-
-	fmt.Print("Enter your move (row.col, e.g. 1.2): ")
-	input, err := reader.ReadString('\n')
-	if err != nil {
-		return 0, 0, NewGameError(ErrInvalidInput, "failed to read input")
-	}
-
+	input := g.io.ReadInput()
 	input = strings.TrimSpace(input)
 	parts := strings.Split(input, ".")
 	if len(parts) != 2 {
@@ -89,9 +79,8 @@ func (g *Game) readInput() (int, int, error) {
 	}
 
 	if row < 0 || row > 2 || col < 0 || col > 2 {
-		return 0, 0, NewGameError(ErrInvalidInput, fmt.Sprintf("position (%d,%d) is out of bounds", row, col))
+		return 0, 0, NewGameError(ErrOutOfBounds, "position is out of bounds (0-2,0-2)")
 	}
 
 	return row, col, nil
-
 }

@@ -1,8 +1,16 @@
 package main
 
-import "github.com/thotluna/ttt/game"
+import (
+	"os"
+
+	"github.com/thotluna/ttt/game"
+	"github.com/thotluna/ttt/view"
+)
 
 func main() {
-	g := game.NewGame()
+	io := view.NewIOTerminal()
+	g := game.NewGame(&io)
 	g.Play()
+
+	os.Exit(0)
 }
