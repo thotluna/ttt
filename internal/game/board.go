@@ -31,7 +31,6 @@ func (b *Board) PlaceToken(token Token) error {
 	if b.board[token.row][token.col] != '-' {
 		return NewGameError(ErrPositionOccupied,
 			FormatPositionTaken(token.row, token.col))
-			FormatPositionTaken(token.row, token.col))
 	}
 
 	b.board[token.row][token.col] = token.GetSymbol()
