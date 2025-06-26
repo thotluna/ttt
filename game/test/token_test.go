@@ -1,7 +1,9 @@
-package game
+package game_test
 
 import (
 	"testing"
+
+	"github.com/thotluna/ttt/game"
 )
 
 func TestNewToken(t *testing.T) {
@@ -16,23 +18,23 @@ func TestNewToken(t *testing.T) {
 	}
 
 	for _, tc := range tests {
-		token := NewToken(tc.symbol, tc.row, tc.col)
-		
-		if token.token != tc.symbol {
-			t.Errorf("Expected symbol %c, got %c", tc.symbol, token.token)
+		token := game.NewToken(tc.symbol, tc.row, tc.col)
+
+		if token.GetSymbol() != tc.symbol {
+			t.Errorf("Expected symbol %c, got %c", tc.symbol, token.GetSymbol())
 		}
-		if token.row != tc.row {
-			t.Errorf("Expected row %d, got %d", tc.row, token.row)
+		if token.GetRow() != tc.row {
+			t.Errorf("Expected row %d, got %d", tc.row, token.GetRow())
 		}
-		if token.col != tc.col {
-			t.Errorf("Expected col %d, got %d", tc.col, token.col)
+		if token.GetCol() != tc.col {
+			t.Errorf("Expected col %d, got %d", tc.col, token.GetCol())
 		}
 	}
 }
 
 func TestGetSymbol(t *testing.T) {
 	tests := []struct {
-		symbol rune
+		symbol   rune
 		expected rune
 	}{
 		{'X', 'X'},
@@ -41,7 +43,7 @@ func TestGetSymbol(t *testing.T) {
 	}
 
 	for _, tc := range tests {
-		token := Token{token: tc.symbol}
+		token := game.NewToken(tc.symbol, 0, 0)
 		result := token.GetSymbol()
 		if result != tc.expected {
 			t.Errorf("Expected %c, got %c", tc.expected, result)
@@ -50,16 +52,16 @@ func TestGetSymbol(t *testing.T) {
 }
 
 func TestTokenFields(t *testing.T) {
-	token := NewToken('X', 1, 2)
-	
+	token := game.NewToken('X', 1, 2)
+
 	// Verificar que los campos no exportados sean accesibles dentro del paquete
-	if token.token != 'X' {
+	if token.GetSymbol() != 'X' {
 		t.Error("Token symbol not set correctly")
 	}
-	if token.row != 1 {
+	if token.GetRow() != 1 {
 		t.Error("Row not set correctly")
 	}
-	if token.col != 2 {
+	if token.GetCol() != 2 {
 		t.Error("Column not set correctly")
 	}
 }
