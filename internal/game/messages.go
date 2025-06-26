@@ -1,6 +1,9 @@
 package game
 
-import "strconv"
+import (
+	"fmt"
+	"strconv"
+)
 
 const (
 	MsgPlayerTurn = "Player %c turn"
@@ -9,12 +12,13 @@ const (
 )
 
 const (
-	MsgInvalidFormat   = "invalid format. Please use 'row.col' (e.g., '1.2')"
-	MsgRowMustBeNumber = "row must be a number between 0 and 2"
-	MsgColMustBeNumber = "column must be a number between 0 and 2"
-	MsgOutOfBounds     = "position is out of bounds (0-2,0-2)"
-	MsgPositionTaken   = "position (%d,%d) is already taken"
-	MsgInvalidInput    = "invalid input: %s"
+	MsgInvalidFormat      = "invalid format. Please use 'row.col' (e.g., '1.2')"
+	MsgRowMustBeNumber    = "row must be a number between 0 and 2"
+	MsgColMustBeNumber    = "column must be a number between 0 and 2"
+	MsgOutOfBounds        = "position is out of bounds (0-2,0-2)"
+	MsgPositionOutOfBounds = "position (%d,%d) is out of bounds"
+	MsgPositionTaken      = "position (%d,%d) is already taken"
+	MsgInvalidInput       = "invalid input: %s"
 )
 
 const (
@@ -35,4 +39,8 @@ func FormatInvalidInput(msg string) string {
 
 func FormatUnexpectedError(err error) string {
 	return "Unexpected error: " + err.Error()
+}
+
+func FormatPositionOutOfBounds(row, col int) string {
+	return fmt.Sprintf(MsgPositionOutOfBounds, row, col)
 }
