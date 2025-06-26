@@ -4,7 +4,7 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/thotluna/ttt/game"
+	"github.com/thotluna/ttt/internal/game"
 )
 
 func TestNewBoard(t *testing.T) {
@@ -122,7 +122,7 @@ func TestPlaceToken_Validation(t *testing.T) {
 	for _, tc := range tests {
 		t.Run(tc.name, func(t *testing.T) {
 			board := game.NewBoard()
-			
+
 			if tc.name == "position already taken" {
 				// Place a token at (0,0) for the "position already taken" test
 				err := board.PlaceToken(game.NewToken('O', 0, 0))
@@ -132,7 +132,7 @@ func TestPlaceToken_Validation(t *testing.T) {
 			}
 
 			err := board.PlaceToken(tc.token)
-			
+
 			if tc.expectError {
 				if err == nil {
 					t.Error("Expected an error but got none")

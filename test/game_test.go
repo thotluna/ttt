@@ -3,7 +3,7 @@ package game_test
 import (
 	"testing"
 
-	"github.com/thotluna/ttt/game"
+	"github.com/thotluna/ttt/internal/game"
 	"github.com/thotluna/ttt/testutils"
 )
 

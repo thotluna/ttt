@@ -3,7 +3,7 @@ package testutils
 import (
 	"strings"
 
-	"github.com/thotluna/ttt/view"
+	"github.com/thotluna/ttt/internal/view"
 )
 
 type MockIO struct {

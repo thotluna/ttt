@@ -4,8 +4,8 @@ import (
 	"strconv"
 	"strings"
 
-	"github.com/thotluna/ttt/constans"
-	"github.com/thotluna/ttt/view"
+	"github.com/thotluna/ttt/internal/constans"
+	"github.com/thotluna/ttt/internal/view"
 )
 
 type Game struct {

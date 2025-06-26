@@ -3,7 +3,7 @@ package game
 import (
 	"fmt"
 
-	"github.com/thotluna/ttt/constans"
+	"github.com/thotluna/ttt/internal/constans"
 )
 
 type Board struct {

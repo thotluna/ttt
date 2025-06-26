@@ -6,7 +6,7 @@ import (
 	"os"
 	"strings"
 
-	"github.com/thotluna/ttt/constans"
+	"github.com/thotluna/ttt/internal/constans"
 )
 
 var _ IO = (*IOTerminal)(nil)
