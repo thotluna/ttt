@@ -4,6 +4,7 @@ import (
 	"strconv"
 	"strings"
 
+	"github.com/thotluna/ttt/constans"
 	"github.com/thotluna/ttt/view"
 )
 
@@ -23,8 +24,8 @@ func NewGame(io view.IO) Game {
 func (g *Game) Play() {
 	for {
 		_, player := g.turn.GetTurn()
-		g.io.PrintBoard(g.board.board)
-		g.io.PrintMessage("Player " + string(player) + " turn")
+		g.io.PrintBoard(g.board.GetBoard())
+		g.io.PrintMessage(constans.FormatPlayerTurn(player))
 
 		row, col, err := g.readInput()
 		if err != nil {
@@ -37,19 +38,19 @@ func (g *Game) Play() {
 			if Is(err, ErrPositionOccupied) || Is(err, ErrOutOfBounds) {
 				g.io.PrintLine("Error: " + err.Error())
 			} else {
-				g.io.PrintLine("Unexpected error: " + err.Error())
+				g.io.PrintLine(constans.FormatUnexpectedError(err))
 			}
 			continue
 		}
 
 		if g.board.CheckWin(player) {
-			g.io.PrintBoard(g.board.board)
+			g.io.PrintBoard(g.board.GetBoard())
 			g.io.PrintWin(player)
 			return
 		}
 
 		if g.board.FullBoard() {
-			g.io.PrintBoard(g.board.board)
+			g.io.PrintBoard(g.board.GetBoard())
 			g.io.PrintDraw()
 			return
 		}
@@ -65,21 +66,21 @@ func (g *Game) readInput() (int, int, error) {
 	input = strings.TrimSpace(input)
 	parts := strings.Split(input, ".")
 	if len(parts) != 2 {
-		return 0, 0, NewGameError(ErrInvalidInput, "invalid format. Please use 'row.col' (e.g., '1.2')")
+		return 0, 0, NewGameError(ErrInvalidInput, constans.MsgInvalidFormat)
 	}
 
 	row, err := strconv.Atoi(strings.TrimSpace(parts[0]))
 	if err != nil {
-		return 0, 0, NewGameError(ErrInvalidInput, "row must be a number between 0 and 2")
+		return 0, 0, NewGameError(ErrInvalidInput, constans.MsgRowMustBeNumber)
 	}
 
 	col, err := strconv.Atoi(strings.TrimSpace(parts[1]))
 	if err != nil {
-		return 0, 0, NewGameError(ErrInvalidInput, "column must be a number between 0 and 2")
+		return 0, 0, NewGameError(ErrInvalidInput, constans.MsgColMustBeNumber)
 	}
 
 	if row < 0 || row > 2 || col < 0 || col > 2 {
-		return 0, 0, NewGameError(ErrOutOfBounds, "position is out of bounds (0-2,0-2)")
+		return 0, 0, NewGameError(ErrOutOfBounds, constans.MsgOutOfBounds)
 	}
 
 	return row, col, nil

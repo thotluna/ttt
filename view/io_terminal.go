@@ -5,7 +5,11 @@ import (
 	"fmt"
 	"os"
 	"strings"
+
+	"github.com/thotluna/ttt/constans"
 )
+
+var _ IO = (*IOTerminal)(nil)
 
 type IOTerminal struct {
 }
@@ -38,9 +42,9 @@ func (i *IOTerminal) PrintBoard(board [3][3]rune) {
 }
 
 func (i *IOTerminal) PrintWin(player rune) {
-	fmt.Printf("Player %c wins!\n", player)
+	fmt.Printf(constans.MsgPlayerWins+"\n", player)
 }
 
 func (i *IOTerminal) PrintDraw() {
-	fmt.Println("Draw!")
+	fmt.Println(constans.MsgGameDraw)
 }

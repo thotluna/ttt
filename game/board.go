@@ -1,6 +1,10 @@
 package game
 
-import "fmt"
+import (
+	"fmt"
+
+	"github.com/thotluna/ttt/constans"
+)
 
 type Board struct {
 	board [3][3]rune
@@ -28,7 +32,7 @@ func (b *Board) PlaceToken(token Token) error {
 
 	if b.board[token.row][token.col] != '-' {
 		return NewGameError(ErrPositionOccupied,
-			fmt.Sprintf("position (%d,%d) is already taken", token.row, token.col))
+			constans.FormatPositionTaken(token.row, token.col))
 	}
 
 	b.board[token.row][token.col] = token.GetSymbol()
