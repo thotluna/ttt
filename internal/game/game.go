@@ -1,10 +1,14 @@
 package game
 
 import (
+	"fmt"
 	"strconv"
 	"strings"
 
+<<<<<<< HEAD
 	"github.com/thotluna/ttt/internal/constans"
+=======
+>>>>>>> 59d54d0 (refactor: reorganize project structure)
 	"github.com/thotluna/ttt/internal/view"
 )
 
@@ -25,7 +29,7 @@ func (g *Game) Play() {
 	for {
 		_, player := g.turn.GetTurn()
 		g.io.PrintBoard(g.board.GetBoard())
-		g.io.PrintMessage(constans.FormatPlayerTurn(player))
+		g.io.PrintMessage(FormatPlayerTurn(player))
 
 		row, col, err := g.readInput()
 		if err != nil {
@@ -38,20 +42,20 @@ func (g *Game) Play() {
 			if Is(err, ErrPositionOccupied) || Is(err, ErrOutOfBounds) {
 				g.io.PrintLine("Error: " + err.Error())
 			} else {
-				g.io.PrintLine(constans.FormatUnexpectedError(err))
+				g.io.PrintLine(FormatUnexpectedError(err))
 			}
 			continue
 		}
 
 		if g.board.CheckWin(player) {
 			g.io.PrintBoard(g.board.GetBoard())
-			g.io.PrintWin(player)
+			g.io.PrintLine(fmt.Sprintf(MsgPlayerWins, player))
 			return
 		}
 
 		if g.board.FullBoard() {
 			g.io.PrintBoard(g.board.GetBoard())
-			g.io.PrintDraw()
+			g.io.PrintLine(MsgGameDraw)
 			return
 		}
 
@@ -66,21 +70,21 @@ func (g *Game) readInput() (int, int, error) {
 	input = strings.TrimSpace(input)
 	parts := strings.Split(input, ".")
 	if len(parts) != 2 {
-		return 0, 0, NewGameError(ErrInvalidInput, constans.MsgInvalidFormat)
+		return 0, 0, NewGameError(ErrInvalidInput, MsgInvalidFormat)
 	}
 
 	row, err := strconv.Atoi(strings.TrimSpace(parts[0]))
 	if err != nil {
-		return 0, 0, NewGameError(ErrInvalidInput, constans.MsgRowMustBeNumber)
+		return 0, 0, NewGameError(ErrInvalidInput, MsgRowMustBeNumber)
 	}
 
 	col, err := strconv.Atoi(strings.TrimSpace(parts[1]))
 	if err != nil {
-		return 0, 0, NewGameError(ErrInvalidInput, constans.MsgColMustBeNumber)
+		return 0, 0, NewGameError(ErrInvalidInput, MsgColMustBeNumber)
 	}
 
 	if row < 0 || row > 2 || col < 0 || col > 2 {
-		return 0, 0, NewGameError(ErrOutOfBounds, constans.MsgOutOfBounds)
+		return 0, 0, NewGameError(ErrOutOfBounds, MsgOutOfBounds)
 	}
 
 	return row, col, nil

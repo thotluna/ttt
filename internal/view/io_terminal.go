@@ -5,8 +5,11 @@ import (
 	"fmt"
 	"os"
 	"strings"
+<<<<<<< HEAD
 
 	"github.com/thotluna/ttt/internal/constans"
+=======
+>>>>>>> 59d54d0 (refactor: reorganize project structure)
 )
 
 var _ IO = (*IOTerminal)(nil)
@@ -39,12 +42,4 @@ func (i *IOTerminal) PrintBoard(board [3][3]rune) {
 		}
 		fmt.Println()
 	}
-}
-
-func (i *IOTerminal) PrintWin(player rune) {
-	fmt.Printf(constans.MsgPlayerWins+"\n", player)
-}
-
-func (i *IOTerminal) PrintDraw() {
-	fmt.Println(constans.MsgGameDraw)
 }

@@ -2,8 +2,11 @@ package game
 
 import (
 	"fmt"
+<<<<<<< HEAD
 
 	"github.com/thotluna/ttt/internal/constans"
+=======
+>>>>>>> 59d54d0 (refactor: reorganize project structure)
 )
 
 type Board struct {
@@ -32,7 +35,7 @@ func (b *Board) PlaceToken(token Token) error {
 
 	if b.board[token.row][token.col] != '-' {
 		return NewGameError(ErrPositionOccupied,
-			constans.FormatPositionTaken(token.row, token.col))
+			FormatPositionTaken(token.row, token.col))
 	}
 
 	b.board[token.row][token.col] = token.GetSymbol()

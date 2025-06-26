@@ -3,8 +3,8 @@ package main
 import (
 	"os"
 
-	"github.com/thotluna/ttt/game"
-	"github.com/thotluna/ttt/view"
+	"github.com/thotluna/ttt/internal/game"
+	"github.com/thotluna/ttt/internal/view"
 )
 
 func main() {
