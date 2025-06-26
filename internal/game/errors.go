@@ -1,7 +1,5 @@
 package game
 
-import "fmt"
-
 // GameError represents a custom error type for game-related errors
 type GameError struct {
 	Code    ErrorCode
@@ -24,7 +22,7 @@ const (
 // Error returns the error message
 func (e *GameError) Error() string {
 	if e.Details != "" {
-		return fmt.Sprintf("%s: %s", e.Message, e.Details)
+		return e.Message + ": " + e.Details
 	}
 	return e.Message
 }
@@ -38,13 +36,13 @@ func NewGameError(code ErrorCode, details string) *GameError {
 
 	switch code {
 	case ErrInvalidInput:
-		err.Message = "invalid input"
+		err.Message = MsgInvalidInputError
 	case ErrPositionOccupied:
-		err.Message = "position already occupied"
+		err.Message = MsgPositionOccupied
 	case ErrOutOfBounds:
-		err.Message = "position out of bounds"
+		err.Message = MsgOutOfBoundsError
 	default:
-		err.Message = "unknown error"
+		err.Message = MsgUnknownError
 	}
 
 	return err

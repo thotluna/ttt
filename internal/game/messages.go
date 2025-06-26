@@ -22,7 +22,11 @@ const (
 )
 
 const (
-	MsgUnexpectedError = "Unexpected error: %s"
+	MsgUnexpectedError      = "Unexpected error: %s"
+	MsgInvalidInputError    = "invalid input"
+	MsgPositionOccupied     = "position already occupied"
+	MsgOutOfBoundsError    = "position out of bounds"
+	MsgUnknownError        = "unknown error"
 )
 
 func FormatPlayerTurn(symbol rune) string {
