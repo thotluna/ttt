@@ -9,111 +9,45 @@ import (
 )
 
 type Game struct {
-	turn  int
-	board [3][3]rune
+	turn  Turn
+	board *Board
 }
 
 func NewGame() Game {
 	return Game{
-		turn: 0,
-		board: [3][3]rune{
-			{'-', '-', '-'},
-			{'-', '-', '-'},
-			{'-', '-', '-'},
-		},
+		turn:  NewTurn(),
+		board: NewBoard(),
 	}
 }
-
-func (g *Game) getTurn() rune {
-	switch g.turn {
-	case 0:
-		return 'X'
-	case 1:
-		return 'O'
-	default:
-		return 'X'
-	}
-}
-
 func (g *Game) Play() {
 	for {
-		turn := g.getTurn()
-		g.printBoard()
-		fmt.Printf("Player %c's turn\n", turn)
+		_, rune := g.turn.GetTurn()
+		g.board.PrintBoard()
+		fmt.Printf("Player %c turn\n", rune)
 		row, col, err := g.readInput()
 		if err != nil {
 			fmt.Println("Error leyendo la entrada:", err)
-			return
+			continue
 		}
 
-		g.board[row][col] = turn
+		g.board.PlaceToken(NewToken(rune, row, col))
 
-		if g.checkWin(turn) {
-			g.printBoard()
-			fmt.Printf("Player %c wins!\n", turn)
+		if g.board.CheckWin(rune) {
+			g.board.PrintBoard()
+			fmt.Printf("Player %c wins!\n", rune)
 			os.Exit(0)
 		}
 
-		if g.fullBoard() {
-			g.printBoard()
+		if g.board.FullBoard() {
+			g.board.PrintBoard()
 			fmt.Println("Draw!")
 			os.Exit(0)
 		}
 
-		g.TurnChange()
+		g.turn.TurnChange()
 
 	}
 
-}
-
-func (g *Game) fullBoard() bool {
-	for i := 0; i < 3; i++ {
-		for j := 0; j < 3; j++ {
-			if g.board[i][j] == '-' {
-				return false
-			}
-		}
-	}
-	return true
-}
-
-func (g *Game) checkWin(turn rune) bool {
-	// Check rows
-	for i := 0; i < 3; i++ {
-		if g.board[i][0] == g.board[i][1] && g.board[i][1] == g.board[i][2] && g.board[i][0] == turn {
-			return true
-		}
-	}
-
-	// Check columns
-	for i := 0; i < 3; i++ {
-		if g.board[0][i] == g.board[1][i] && g.board[1][i] == g.board[2][i] && g.board[0][i] == turn {
-			return true
-		}
-	}
-
-	// Check diagonals
-	if g.board[0][0] == g.board[1][1] && g.board[1][1] == g.board[2][2] && g.board[0][0] == turn {
-		return true
-	}
-	if g.board[0][2] == g.board[1][1] && g.board[1][1] == g.board[2][0] && g.board[0][2] == turn {
-		return true
-	}
-
-	return false
-}
-
-func (g *Game) TurnChange() {
-	g.turn = (g.turn + 1) % 2
-}
-
-func (g *Game) printBoard() {
-	for i := 0; i < 3; i++ {
-		for j := 0; j < 3; j++ {
-			fmt.Printf("%c ", g.board[i][j])
-		}
-		fmt.Println()
-	}
 }
 
 func (g *Game) readInput() (int, int, error) {
@@ -121,7 +55,8 @@ func (g *Game) readInput() (int, int, error) {
 		reader := bufio.NewReader(os.Stdin)
 		input, err := reader.ReadString('\n')
 		if err != nil {
-			return 0, 0, err
+			fmt.Println("Error leyendo la entrada:", err)
+			continue
 		}
 
 		parts := strings.Split(input, ".")
