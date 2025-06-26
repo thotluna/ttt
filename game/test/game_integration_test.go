@@ -4,11 +4,11 @@ import (
 	"testing"
 
 	"github.com/thotluna/ttt/game"
-	other_test "github.com/thotluna/ttt/other"
+	"github.com/thotluna/ttt/testutils"
 )
 
 func TestGame_WinCondition(t *testing.T) {
-	mock := other_test.NewMockIO("0.0", "1.0", "0.1", "1.1", "0.2")
+	mock := testutils.NewMockIO("0.0", "1.0", "0.1", "1.1", "0.2")
 
 	g := game.NewGame(mock)
 	g.Play()
@@ -19,7 +19,7 @@ func TestGame_WinCondition(t *testing.T) {
 }
 
 func TestGame_DrawCondition(t *testing.T) {
-	mock := other_test.NewMockIO("0.0", "0.1", "0.2", "1.1", "1.0", "2.0", "1.2", "2.2", "2.1")
+	mock := testutils.NewMockIO("0.0", "0.1", "0.2", "1.1", "1.0", "2.0", "1.2", "2.2", "2.1")
 
 	g := game.NewGame(mock)
 	g.Play()
@@ -49,7 +49,7 @@ func TestGame_InvalidInputs(t *testing.T) {
 
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			mock := other_test.NewMockIO(tt.inputs...)
+			mock := testutils.NewMockIO(tt.inputs...)
 
 			g := game.NewGame(mock)
 			g.Play()

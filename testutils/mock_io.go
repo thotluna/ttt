@@ -1,4 +1,4 @@
-package other_test
+package testutils
 
 import (
 	"strings"
