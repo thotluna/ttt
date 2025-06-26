@@ -71,23 +71,19 @@ func (g *Game) readInput() (int, int, error) {
 	parts := strings.Split(input, ".")
 	if len(parts) != 2 {
 		return 0, 0, NewGameError(ErrInvalidInput, MsgInvalidFormat)
-		return 0, 0, NewGameError(ErrInvalidInput, MsgInvalidFormat)
 	}
 
 	row, err := strconv.Atoi(strings.TrimSpace(parts[0]))
 	if err != nil {
-		return 0, 0, NewGameError(ErrInvalidInput, MsgRowMustBeNumber)
 		return 0, 0, NewGameError(ErrInvalidInput, MsgRowMustBeNumber)
 	}
 
 	col, err := strconv.Atoi(strings.TrimSpace(parts[1]))
 	if err != nil {
 		return 0, 0, NewGameError(ErrInvalidInput, MsgColMustBeNumber)
-		return 0, 0, NewGameError(ErrInvalidInput, MsgColMustBeNumber)
 	}
 
 	if row < 0 || row > 2 || col < 0 || col > 2 {
-		return 0, 0, NewGameError(ErrOutOfBounds, MsgOutOfBounds)
 		return 0, 0, NewGameError(ErrOutOfBounds, MsgOutOfBounds)
 	}
 
