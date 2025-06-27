@@ -13,36 +13,33 @@ type Game struct {
 
 func NewGame(io view.IO) Game {
 	board := NewBoard(io)
+	players := []*Player{
+		NewPlayer('X', io, board),
+		NewPlayer('O', io, board),
+	}
 	return Game{
-		turn:  NewTurn(),
-		board: board,
-		Players: []*Player{
-			NewPlayer('X', io, board),
-			NewPlayer('O', io, board),
-		},
-		io: io,
+		turn:    NewTurn(players, io),
+		board:   board,
+		Players: players,
+		io:      io,
 	}
 }
 
-func (g *Game) getPlayer(indexPlayer int) *Player {
-	return g.Players[indexPlayer]
-}
-
 func (g *Game) Play() {
-	var isWin bool
+
 	for {
 		g.board.Print()
-		indexPlayer, symbolPlayer := g.turn.GetTurn()
-		g.io.PrintMessage(FormatPlayerTurn(symbolPlayer))
+		g.turn.PrintTurn()
 
-		isWin = g.getPlayer(indexPlayer).Put()
+		currentPlayer := g.turn.GetCurrentPlayer()
+		isWin := currentPlayer.Put()
 
 		if isWin {
 			return
 		}
 
 		if g.board.FullBoard() {
-			g.io.PrintBoard(g.board.GetBoard())
+			g.board.Print()
 			g.io.PrintLine(MsgGameDraw)
 			return
 		}

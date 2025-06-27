@@ -1,12 +1,18 @@
 package game
 
+import "github.com/thotluna/ttt/internal/view"
+
 type Turn struct {
-	turn int
+	turn    int
+	players []*Player
+	io      view.IO
 }
 
-func NewTurn() Turn {
+func NewTurn(players []*Player, io view.IO) Turn {
 	return Turn{
-		turn: 0,
+		turn:    0,
+		players: players,
+		io:      io,
 	}
 }
 
@@ -23,4 +29,13 @@ func (t *Turn) GetTurn() (int, rune) {
 	default:
 		return 0, 'X'
 	}
+}
+
+func (t *Turn) GetCurrentPlayer() *Player {
+	return t.players[t.turn]
+}
+
+func (t *Turn) PrintTurn() {
+	_, symbol := t.GetTurn()
+	t.io.PrintMessage(FormatPlayerTurn(symbol))
 }
