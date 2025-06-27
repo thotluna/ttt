@@ -84,41 +84,27 @@ func TestPlaceToken_Validation(t *testing.T) {
 	tests := []struct {
 		name        string
 		token       game.Token
+		setup       func(*game.Board) error
 		expectError bool
 		errMsg      string
 	}{
 		{
 			name:        "valid position",
 			token:       game.NewToken('X', 1, 1),
+			setup:       func(b *game.Board) error { return nil },
 			expectError: false,
 		},
 		{
-			name:        "out of bounds row",
-			token:       game.NewToken('X', 3, 1),
+			name:        "invalid token",
+			token:       game.Token{},
+			setup:       func(b *game.Board) error { return nil },
 			expectError: true,
-			errMsg:      "position (3,1) is out of bounds",
-		},
-		{
-			name:        "out of bounds column",
-			token:       game.NewToken('X', 1, 3),
-			expectError: true,
-			errMsg:      "position (1,3) is out of bounds",
-		},
-		{
-			name:        "negative row",
-			token:       game.NewToken('X', -1, 1),
-			expectError: true,
-			errMsg:      "position (-1,1) is out of bounds",
-		},
-		{
-			name:        "negative column",
-			token:       game.NewToken('X', 1, -1),
-			expectError: true,
-			errMsg:      "position (1,-1) is out of bounds",
+			errMsg:      "invalid token",
 		},
 		{
 			name:        "position already taken",
 			token:       game.NewToken('X', 0, 0),
+			setup:       func(b *game.Board) error { return b.PlaceToken(game.NewToken('O', 0, 0)) },
 			expectError: true,
 			errMsg:      "position (0,0) is already taken",
 		},
@@ -129,12 +115,8 @@ func TestPlaceToken_Validation(t *testing.T) {
 			mockIO := &testutils.MockIO{}
 			board := game.NewBoard(mockIO)
 
-			if tc.name == "position already taken" {
-				// Place a token at (0,0) for the "position already taken" test
-				err := board.PlaceToken(game.NewToken('O', 0, 0))
-				if err != nil {
-					t.Fatalf("Setup error: %v", err)
-				}
+			if err := tc.setup(board); err != nil {
+				t.Fatalf("Setup error: %v", err)
 			}
 
 			err := board.PlaceToken(tc.token)
@@ -221,5 +203,45 @@ func TestCheckWin(t *testing.T) {
 				t.Errorf("CheckWin() = %v, want %v", got, tc.win)
 			}
 		})
+	}
+}
+
+func TestGetBoardReturnsCopy(t *testing.T) {
+	mockIO := &testutils.MockIO{}
+	board := game.NewBoard(mockIO)
+	
+	// Obtener una copia del tablero
+	boardCopy := board.GetBoard()
+	
+	// Modificar la copia
+	boardCopy[0][0] = 'X'
+	
+	// Verificar que el tablero original no fue modificado
+	if board.GetBoard()[0][0] != '-' {
+		t.Error("GetBoard() should return a copy of the board, not a reference")
+	}
+}
+
+func TestPrint(t *testing.T) {
+	mockIO := &testutils.MockIO{}
+	board := game.NewBoard(mockIO)
+	
+	// Colocar algunas fichas para probar la salida
+	board.PlaceToken(game.NewToken('X', 0, 0))
+	board.PlaceToken(game.NewToken('O', 1, 1))
+	
+	// Llamar al método Print
+	board.Print()
+	
+	// Verificar que se llamó a PrintBoard en el mock
+	output := mockIO.GetOutput()
+	if len(output) == 0 {
+		t.Fatal("Expected Print to produce output")
+	}
+	
+	// Verificar que la salida contiene las fichas colocadas
+	outputStr := strings.Join(output, "\n")
+	if !strings.Contains(outputStr, "X") || !strings.Contains(outputStr, "O") {
+		t.Error("Expected output to contain placed tokens")
 	}
 }

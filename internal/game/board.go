@@ -23,6 +23,10 @@ func (b *Board) GetBoard() [3][3]rune {
 }
 
 func (b *Board) PlaceToken(token Token) error {
+	if token.GetSymbol() == 0 {
+		return NewGameError(ErrOutOfBounds, "invalid token")
+	}
+
 	if token.row < 0 || token.row >= 3 || token.col < 0 || token.col >= 3 {
 		return NewGameError(ErrOutOfBounds, FormatPositionOutOfBounds(token.row, token.col))
 	}
@@ -47,21 +51,18 @@ func (b *Board) FullBoard() bool {
 	return true
 }
 func (b *Board) CheckWin(turn rune) bool {
-	// Check rows
 	for i := 0; i < 3; i++ {
 		if b.board[i][0] == b.board[i][1] && b.board[i][1] == b.board[i][2] && b.board[i][0] == turn {
 			return true
 		}
 	}
 
-	// Check columns
 	for i := 0; i < 3; i++ {
 		if b.board[0][i] == b.board[1][i] && b.board[1][i] == b.board[2][i] && b.board[0][i] == turn {
 			return true
 		}
 	}
 
-	// Check diagonals
 	if b.board[0][0] == b.board[1][1] && b.board[1][1] == b.board[2][2] && b.board[0][0] == turn {
 		return true
 	}
