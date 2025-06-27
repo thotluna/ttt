@@ -23,12 +23,7 @@ func TestNewToken(t *testing.T) {
 		if token.GetSymbol() != tc.symbol {
 			t.Errorf("Expected symbol %c, got %c", tc.symbol, token.GetSymbol())
 		}
-		if token.GetRow() != tc.row {
-			t.Errorf("Expected row %d, got %d", tc.row, token.GetRow())
-		}
-		if token.GetCol() != tc.col {
-			t.Errorf("Expected col %d, got %d", tc.col, token.GetCol())
-		}
+
 	}
 }
 
@@ -58,10 +53,5 @@ func TestTokenFields(t *testing.T) {
 	if token.GetSymbol() != 'X' {
 		t.Error("Token symbol not set correctly")
 	}
-	if token.GetRow() != 1 {
-		t.Error("Row not set correctly")
-	}
-	if token.GetCol() != 2 {
-		t.Error("Column not set correctly")
-	}
+
 }

@@ -17,11 +17,3 @@ func NewToken(symbol rune, row int, col int) Token {
 func (t *Token) GetSymbol() rune {
 	return t.symbol
 }
-
-func (t Token) GetCol() int {
-	return t.col
-}
-
-func (t Token) GetRow() int {
-	return t.row
-}

@@ -1,9 +1,5 @@
 package game
 
-import (
-	"fmt"
-)
-
 type Board struct {
 	board [3][3]rune
 }
@@ -70,12 +66,4 @@ func (b *Board) CheckWin(turn rune) bool {
 	}
 
 	return false
-}
-func (b *Board) PrintBoard() {
-	for i := 0; i < 3; i++ {
-		for j := 0; j < 3; j++ {
-			fmt.Printf("%c ", b.board[i][j])
-		}
-		fmt.Println()
-	}
 }
