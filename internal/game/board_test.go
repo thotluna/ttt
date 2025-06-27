@@ -5,10 +5,12 @@ import (
 	"testing"
 
 	"github.com/thotluna/ttt/internal/game"
+	"github.com/thotluna/ttt/testutils"
 )
 
 func TestNewBoard(t *testing.T) {
-	board := game.NewBoard()
+	mockIO := &testutils.MockIO{}
+	board := game.NewBoard(mockIO)
 	for i := 0; i < 3; i++ {
 		for j := 0; j < 3; j++ {
 			if board.GetBoard()[i][j] != '-' {
@@ -19,7 +21,8 @@ func TestNewBoard(t *testing.T) {
 }
 
 func TestPlaceToken(t *testing.T) {
-	board := game.NewBoard()
+	mockIO := &testutils.MockIO{}
+	board := game.NewBoard(mockIO)
 	token := game.NewToken('X', 1, 1)
 
 	board.PlaceToken(token)
@@ -33,6 +36,7 @@ func TestPlaceToken(t *testing.T) {
 }
 
 func TestFullBoard(t *testing.T) {
+
 	tests := []struct {
 		name   string
 		tokens []game.Token
@@ -64,7 +68,8 @@ func TestFullBoard(t *testing.T) {
 
 	for _, tc := range tests {
 		t.Run(tc.name, func(t *testing.T) {
-			board := game.NewBoard()
+			mockIO := &testutils.MockIO{}
+			board := game.NewBoard(mockIO)
 			for _, token := range tc.tokens {
 				board.PlaceToken(token)
 			}
@@ -121,7 +126,8 @@ func TestPlaceToken_Validation(t *testing.T) {
 
 	for _, tc := range tests {
 		t.Run(tc.name, func(t *testing.T) {
-			board := game.NewBoard()
+			mockIO := &testutils.MockIO{}
+			board := game.NewBoard(mockIO)
 
 			if tc.name == "position already taken" {
 				// Place a token at (0,0) for the "position already taken" test
@@ -206,12 +212,13 @@ func TestCheckWin(t *testing.T) {
 
 	for _, tc := range tests {
 		t.Run(tc.name, func(t *testing.T) {
-			board := game.NewBoard()
+			mockIO := &testutils.MockIO{}
+			board := game.NewBoard(mockIO)
 			for _, token := range tc.tokens {
 				board.PlaceToken(token)
 			}
 			if got := board.CheckWin(tc.symbol); got != tc.win {
-				t.Errorf("Expected CheckWin('%c') = %v, got %v", tc.symbol, tc.win, got)
+				t.Errorf("CheckWin() = %v, want %v", got, tc.win)
 			}
 		})
 	}

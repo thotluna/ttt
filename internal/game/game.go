@@ -1,8 +1,6 @@
 package game
 
 import (
-	"fmt"
-
 	"github.com/thotluna/ttt/internal/view"
 )
 
@@ -14,12 +12,13 @@ type Game struct {
 }
 
 func NewGame(io view.IO) Game {
+	board := NewBoard(io)
 	return Game{
 		turn:  NewTurn(),
-		board: NewBoard(),
+		board: board,
 		Players: []*Player{
-			NewPlayer('X', io),
-			NewPlayer('O', io),
+			NewPlayer('X', io, board),
+			NewPlayer('O', io, board),
 		},
 		io: io,
 	}
@@ -30,17 +29,15 @@ func (g *Game) getPlayer(indexPlayer int) *Player {
 }
 
 func (g *Game) Play() {
+	var isWin bool
 	for {
-		g.io.PrintBoard(g.board.GetBoard())
+		g.board.Print()
 		indexPlayer, symbolPlayer := g.turn.GetTurn()
 		g.io.PrintMessage(FormatPlayerTurn(symbolPlayer))
 
-		playerCurrent := g.getPlayer(indexPlayer)
-		playerCurrent.Put(g.board)
+		isWin = g.getPlayer(indexPlayer).Put()
 
-		if g.board.CheckWin(symbolPlayer) {
-			g.io.PrintBoard(g.board.GetBoard())
-			g.io.PrintLine(fmt.Sprintf(MsgPlayerWins, symbolPlayer))
+		if isWin {
 			return
 		}
 
@@ -49,6 +46,7 @@ func (g *Game) Play() {
 			g.io.PrintLine(MsgGameDraw)
 			return
 		}
+
 		g.turn.TurnChange()
 
 	}

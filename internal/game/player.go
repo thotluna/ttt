@@ -1,6 +1,7 @@
 package game
 
 import (
+	"fmt"
 	"strconv"
 	"strings"
 
@@ -10,16 +11,18 @@ import (
 type Player struct {
 	symbol rune
 	io     view.IO
+	board  *Board
 }
 
-func NewPlayer(symbol rune, io view.IO) *Player {
+func NewPlayer(symbol rune, io view.IO, board *Board) *Player {
 	return &Player{
 		symbol: symbol,
 		io:     io,
+		board:  board,
 	}
 }
 
-func (p *Player) Put(board *Board) {
+func (p *Player) Put() bool {
 	for {
 		row, col, err := p.readInput()
 		if err != nil {
@@ -27,14 +30,22 @@ func (p *Player) Put(board *Board) {
 			continue
 		}
 
-		err = board.PlaceToken(NewToken(p.symbol, row, col))
+		err = p.board.PlaceToken(NewToken(p.symbol, row, col))
 		if err != nil {
 			p.io.PrintLine(err.Error())
 			continue
 		}
 
-		break
+		return p.CheckWin()
 	}
+}
+
+func (p *Player) CheckWin() bool {
+	if p.board.CheckWin(p.symbol) {
+		p.io.PrintLine(fmt.Sprintf(MsgPlayerWins, p.symbol))
+		return true
+	}
+	return false
 }
 
 func (p *Player) readInput() (int, int, error) {

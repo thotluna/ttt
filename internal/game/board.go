@@ -1,11 +1,15 @@
 package game
 
+import "github.com/thotluna/ttt/internal/view"
+
 type Board struct {
 	board [3][3]rune
+	io    view.IO
 }
 
-func NewBoard() *Board {
+func NewBoard(io view.IO) *Board {
 	return &Board{
+		io: io,
 		board: [3][3]rune{
 			{'-', '-', '-'},
 			{'-', '-', '-'},
@@ -66,4 +70,8 @@ func (b *Board) CheckWin(turn rune) bool {
 	}
 
 	return false
+}
+
+func (b *Board) Print() {
+	b.io.PrintBoard(b.board)
 }
