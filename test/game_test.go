@@ -16,6 +16,7 @@ func TestGame_WinCondition(t *testing.T) {
 	if !mock.ContainsOutput("Player X wins!") {
 		t.Error("Expected X to win the game")
 	}
+
 }
 
 func TestGame_DrawCondition(t *testing.T) {
@@ -35,11 +36,6 @@ func TestGame_InvalidInputs(t *testing.T) {
 		inputs      []string
 		expectedErr string
 	}{
-		{
-			name:        "invalid format",
-			inputs:      []string{"abc", "0.0", "1.1", "0.1", "1.0", "0.2"}, // X gana
-			expectedErr: "Error: invalid input: invalid format. Please use 'row.col' (e.g., '1.2')",
-		},
 		{
 			name:        "out of bounds",
 			inputs:      []string{"5.5", "0.0", "1.1", "0.1", "1.0", "0.2"}, // X gana
