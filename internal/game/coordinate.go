@@ -32,3 +32,35 @@ func (c Coordinate) IsValid() bool {
 func (c Coordinate) Equals(other Coordinate) bool {
 	return c.row == other.row && c.col == other.col
 }
+
+func (c Coordinate) IsVerticalTo(other Coordinate) bool {
+	return c.row == other.row && c.col != other.col
+}
+
+func (c Coordinate) IsHorizontalTo(other Coordinate) bool {
+	return c.col == other.col && c.row != other.row
+}
+
+func (c Coordinate) IsDiagonalTo(other Coordinate) bool {
+	return c.row == c.col && other.row == other.col
+}
+
+func (c Coordinate) IsInverterTo(other Coordinate) bool {
+	return c.row+c.col == 3 && other.row+other.col == 3
+}
+
+func (c Coordinate) Direction(other Coordinate) string {
+	if c.IsVerticalTo(other) {
+		return "vertical"
+	}
+	if c.IsHorizontalTo(other) {
+		return "horizontal"
+	}
+	if c.IsDiagonalTo(other) {
+		return "diagonal"
+	}
+	if c.IsInverterTo(other) {
+		return "inverter"
+	}
+	return "NOT"
+}

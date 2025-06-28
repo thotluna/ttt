@@ -41,11 +41,19 @@ func (p *Player) Put() bool {
 }
 
 func (p *Player) CheckWin() bool {
-	if p.board.CheckWin(p.symbol) {
-		p.io.PrintLine(fmt.Sprintf(MsgPlayerWins, p.symbol))
-		return true
+	tokens := p.board.GetTokenBy(p.symbol)
+	if len(tokens) < 3 {
+		return false
 	}
-	return false
+
+	isWin := tokens[0].Direction(tokens[1]) == tokens[1].Direction(tokens[2]) &&
+		tokens[0].Direction(tokens[1]) != "NOT"
+
+	if isWin {
+		p.io.PrintLine(fmt.Sprintf(MsgPlayerWins, p.symbol))
+	}
+
+	return isWin
 }
 
 func (p *Player) readInput() (int, int, error) {
