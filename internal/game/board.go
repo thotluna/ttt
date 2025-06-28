@@ -22,21 +22,17 @@ func (b *Board) GetBoard() [3][3]rune {
 	return b.board
 }
 
-func (b *Board) PlaceToken(token Token) error {
-	if token.GetSymbol() == 0 {
-		return NewGameError(ErrOutOfBounds, "invalid token")
+func (b *Board) PlaceToken(symbol rune, coor Coordinate) error {
+	if coor.row < 0 || coor.row >= 3 || coor.col < 0 || coor.col >= 3 {
+		return NewGameError(ErrOutOfBounds, FormatPositionOutOfBounds(coor.row, coor.col))
 	}
 
-	if token.row < 0 || token.row >= 3 || token.col < 0 || token.col >= 3 {
-		return NewGameError(ErrOutOfBounds, FormatPositionOutOfBounds(token.row, token.col))
-	}
-
-	if b.board[token.row][token.col] != '-' {
+	if b.board[coor.row][coor.col] != '-' {
 		return NewGameError(ErrPositionOccupied,
-			FormatPositionTaken(token.row, token.col))
+			FormatPositionTaken(coor.row, coor.col))
 	}
 
-	b.board[token.row][token.col] = token.GetSymbol()
+	b.board[coor.row][coor.col] = symbol
 	return nil
 }
 

@@ -30,7 +30,7 @@ func (p *Player) Put() bool {
 			continue
 		}
 
-		err = p.board.PlaceToken(NewToken(p.symbol, row, col))
+		err = p.board.PlaceToken(p.symbol, Coordinate{row, col})
 		if err != nil {
 			p.io.PrintLine(err.Error())
 			continue
