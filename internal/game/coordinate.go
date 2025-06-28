@@ -1,9 +1,17 @@
 package game
 
-import "errors"
+import (
+	"fmt"
+)
 
-var (
-	ErrInvalidPosition = errors.New("position must be between 0 and 2")
+type Direction string
+
+const (
+	Vertical   Direction = "vertical"
+	Horizontal Direction = "horizontal"
+	Diagonal   Direction = "diagonal"
+	Inverter   Direction = "inverter"
+	None       Direction = "none"
 )
 
 type Coordinate struct {
@@ -12,7 +20,7 @@ type Coordinate struct {
 
 func NewCoordinate(row, col int) (Coordinate, error) {
 	if row < 0 || row > 2 || col < 0 || col > 2 {
-		return Coordinate{}, ErrInvalidPosition
+		return Coordinate{}, NewGameError(ErrOutOfBounds, fmt.Sprintf(MsgPositionOutOfBounds, row, col))
 	}
 	return Coordinate{row: row, col: col}, nil
 }
@@ -49,18 +57,18 @@ func (c Coordinate) IsInverterTo(other Coordinate) bool {
 	return c.row+c.col == 3 && other.row+other.col == 3
 }
 
-func (c Coordinate) Direction(other Coordinate) string {
+func (c Coordinate) Direction(other Coordinate) Direction {
 	if c.IsVerticalTo(other) {
-		return "vertical"
+		return Vertical
 	}
 	if c.IsHorizontalTo(other) {
-		return "horizontal"
+		return Horizontal
 	}
 	if c.IsDiagonalTo(other) {
-		return "diagonal"
+		return Diagonal
 	}
 	if c.IsInverterTo(other) {
-		return "inverter"
+		return Inverter
 	}
-	return "NOT"
+	return None
 }
