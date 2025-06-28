@@ -42,19 +42,21 @@ func (c Coordinate) Equals(other Coordinate) bool {
 }
 
 func (c Coordinate) IsVerticalTo(other Coordinate) bool {
-	return c.row == other.row && c.col != other.col
-}
-
-func (c Coordinate) IsHorizontalTo(other Coordinate) bool {
 	return c.col == other.col && c.row != other.row
 }
 
+func (c Coordinate) IsHorizontalTo(other Coordinate) bool {
+	return c.row == other.row && c.col != other.col
+}
+
 func (c Coordinate) IsDiagonalTo(other Coordinate) bool {
-	return c.row == c.col && other.row == other.col
+	// Están en la misma diagonal principal
+	return c.row == c.col && other.row == other.col && c.row != other.row
 }
 
 func (c Coordinate) IsInverterTo(other Coordinate) bool {
-	return c.row+c.col == 3 && other.row+other.col == 3
+	// Están en la misma diagonal inversa (de esquina a esquina)
+	return (c.row+c.col == 2) && (other.row+other.col == 2) && (c.row != other.row)
 }
 
 func (c Coordinate) Direction(other Coordinate) Direction {

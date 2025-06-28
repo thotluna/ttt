@@ -8,14 +8,6 @@ import (
 	"github.com/thotluna/ttt/testutils"
 )
 
-func mustNewCoordinate(row, col int) game.Coordinate {
-	coord, err := game.NewCoordinate(row, col)
-	if err != nil {
-		panic(err)
-	}
-	return coord
-}
-
 func TestNewBoard(t *testing.T) {
 	mockIO := &testutils.MockIO{}
 	board := game.NewBoard(mockIO)
@@ -60,8 +52,8 @@ func TestFullBoard(t *testing.T) {
 			name:   "Partially filled board",
 			symbol: []rune{'X', 'O'},
 			coor: []game.Coordinate{
-				mustNewCoordinate(0, 0),
-				mustNewCoordinate(1, 1),
+				testutils.MustNewCoordinate(t, 0, 0),
+				testutils.MustNewCoordinate(t, 1, 1),
 			},
 			full: false,
 		},
@@ -69,15 +61,15 @@ func TestFullBoard(t *testing.T) {
 			name:   "Full board",
 			symbol: []rune{'X', 'O', 'X', 'O', 'X', 'O', 'X', 'O', 'X'},
 			coor: []game.Coordinate{
-				mustNewCoordinate(0, 0),
-				mustNewCoordinate(0, 1),
-				mustNewCoordinate(0, 2),
-				mustNewCoordinate(1, 0),
-				mustNewCoordinate(1, 1),
-				mustNewCoordinate(1, 2),
-				mustNewCoordinate(2, 0),
-				mustNewCoordinate(2, 1),
-				mustNewCoordinate(2, 2),
+				testutils.MustNewCoordinate(t, 0, 0),
+				testutils.MustNewCoordinate(t, 0, 1),
+				testutils.MustNewCoordinate(t, 0, 2),
+				testutils.MustNewCoordinate(t, 1, 0),
+				testutils.MustNewCoordinate(t, 1, 1),
+				testutils.MustNewCoordinate(t, 1, 2),
+				testutils.MustNewCoordinate(t, 2, 0),
+				testutils.MustNewCoordinate(t, 2, 1),
+				testutils.MustNewCoordinate(t, 2, 2),
 			},
 			full: true,
 		},
@@ -109,15 +101,15 @@ func TestPlaceToken_Validation(t *testing.T) {
 		{
 			name:        "valid position",
 			symbol:      'X',
-			coor:        mustNewCoordinate(1, 1),
+			coor:        testutils.MustNewCoordinate(t, 1, 1),
 			setup:       func(b *game.Board) error { return nil },
 			expectError: false,
 		},
 		{
 			name:        "position already taken",
 			symbol:      'X',
-			coor:        mustNewCoordinate(0, 0),
-			setup:       func(b *game.Board) error { return b.PlaceToken('O', mustNewCoordinate(0, 0)) },
+			coor:        testutils.MustNewCoordinate(t, 0, 0),
+			setup:       func(b *game.Board) error { return b.PlaceToken('O', testutils.MustNewCoordinate(t, 0, 0)) },
 			expectError: true,
 			errMsg:      "position (0,0) is already taken",
 		},
@@ -163,8 +155,8 @@ func TestPrint(t *testing.T) {
 	board := game.NewBoard(mockIO)
 
 	// Colocar algunas fichas para probar la salida
-	board.PlaceToken('X', mustNewCoordinate(0, 0))
-	board.PlaceToken('O', mustNewCoordinate(1, 1))
+	board.PlaceToken('X', testutils.MustNewCoordinate(t, 0, 0))
+	board.PlaceToken('O', testutils.MustNewCoordinate(t, 1, 1))
 
 	// Llamar al método Print
 	board.Print()
