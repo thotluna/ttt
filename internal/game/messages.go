@@ -1,48 +1,46 @@
 package game
 
-import (
-	"fmt"
-	"strconv"
-)
+import "fmt"
 
 const (
-	MsgPlayerTurn = "Player %c turn"
+	MsgPlayerTurn = "Player %c's turn"
 	MsgPlayerWins = "Player %c wins!"
 	MsgGameDraw   = "It's a draw!"
 )
 
 const (
-	MsgInvalidFormat       = "invalid format. Please use 'row.col' (e.g., '1.2')"
+	MsgInvalidFormat       = "invalid format. Use 'row.col' (e.g. '1.2')"
 	MsgRowMustBeNumber     = "row must be a number between 0 and 2"
 	MsgColMustBeNumber     = "column must be a number between 0 and 2"
 	MsgOutOfBounds         = "position is out of bounds (0-2,0-2)"
 	MsgPositionOutOfBounds = "position (%d,%d) is out of bounds"
 	MsgPositionTaken       = "position (%d,%d) is already taken"
 	MsgInvalidInput        = "invalid input: %s"
+	MsgInvalidRange        = "coordinates are out of range"
 )
 
 const (
 	MsgUnexpectedError   = "Unexpected error: %s"
 	MsgInvalidInputError = "invalid input"
-	MsgPositionOccupied  = "position already occupied"
-	MsgOutOfBoundsError  = "position out of bounds"
+	MsgPositionOccupied  = "position is already taken"
+	MsgOutOfBoundsError  = "position is out of bounds"
 	MsgUnknownError      = "unknown error"
 )
 
 func FormatPlayerTurn(symbol rune) string {
-	return "Player " + string(symbol) + " turn"
+	return fmt.Sprintf(MsgPlayerTurn, symbol)
 }
 
 func FormatPositionTaken(row, col int) string {
-	return "position already taken: position (" + strconv.Itoa(row) + "," + strconv.Itoa(col) + ") is already taken"
+	return fmt.Sprintf(MsgPositionTaken, row, col)
 }
 
 func FormatInvalidInput(msg string) string {
-	return "invalid input: " + msg
+	return fmt.Sprintf(MsgInvalidInput, msg)
 }
 
 func FormatUnexpectedError(err error) string {
-	return "Unexpected error: " + err.Error()
+	return fmt.Sprintf(MsgUnexpectedError, err.Error())
 }
 
 func FormatPositionOutOfBounds(row, col int) string {

@@ -19,6 +19,8 @@ const (
 	ErrOutOfBounds
 )
 
+// Los mensajes de error están definidos en messages.go
+
 // Error returns the error message
 func (e *GameError) Error() string {
 	if e.Details != "" {
