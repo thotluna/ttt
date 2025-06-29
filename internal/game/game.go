@@ -32,7 +32,7 @@ func (g *Game) Play() {
 		g.turn.PrintTurn()
 
 		currentPlayer := g.turn.GetCurrentPlayer()
-		isWin := currentPlayer.Put()
+		isWin := currentPlayer.Play()
 
 		if isWin {
 			return

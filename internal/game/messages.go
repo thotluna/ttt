@@ -12,21 +12,21 @@ const (
 )
 
 const (
-	MsgInvalidFormat      = "invalid format. Please use 'row.col' (e.g., '1.2')"
-	MsgRowMustBeNumber    = "row must be a number between 0 and 2"
-	MsgColMustBeNumber    = "column must be a number between 0 and 2"
-	MsgOutOfBounds        = "position is out of bounds (0-2,0-2)"
+	MsgInvalidFormat       = "invalid format. Please use 'row.col' (e.g., '1.2')"
+	MsgRowMustBeNumber     = "row must be a number between 0 and 2"
+	MsgColMustBeNumber     = "column must be a number between 0 and 2"
+	MsgOutOfBounds         = "position is out of bounds (0-2,0-2)"
 	MsgPositionOutOfBounds = "position (%d,%d) is out of bounds"
-	MsgPositionTaken      = "position (%d,%d) is already taken"
-	MsgInvalidInput       = "invalid input: %s"
+	MsgPositionTaken       = "position (%d,%d) is already taken"
+	MsgInvalidInput        = "invalid input: %s"
 )
 
 const (
-	MsgUnexpectedError      = "Unexpected error: %s"
-	MsgInvalidInputError    = "invalid input"
-	MsgPositionOccupied     = "position already occupied"
-	MsgOutOfBoundsError    = "position out of bounds"
-	MsgUnknownError        = "unknown error"
+	MsgUnexpectedError   = "Unexpected error: %s"
+	MsgInvalidInputError = "invalid input"
+	MsgPositionOccupied  = "position already occupied"
+	MsgOutOfBoundsError  = "position out of bounds"
+	MsgUnknownError      = "unknown error"
 )
 
 func FormatPlayerTurn(symbol rune) string {

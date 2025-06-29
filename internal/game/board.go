@@ -1,6 +1,8 @@
 package game
 
-import "github.com/thotluna/ttt/internal/view"
+import (
+	"github.com/thotluna/ttt/internal/view"
+)
 
 type Board struct {
 	board [3][3]rune
@@ -20,6 +22,10 @@ func NewBoard(io view.IO) *Board {
 
 func (b *Board) GetBoard() [3][3]rune {
 	return b.board
+}
+
+func (b *Board) SetBoard(board [3][3]rune) {
+	b.board = board
 }
 
 func (b *Board) PlaceToken(symbol rune, coor Coordinate) error {
