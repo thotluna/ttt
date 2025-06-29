@@ -10,6 +10,7 @@ var (
 
 const (
 	BoardSize = 3
+	EmptyCell = '-'
 )
 
 type Board struct {
@@ -21,9 +22,9 @@ func NewBoard(io view.IO) *Board {
 	return &Board{
 		io: io,
 		board: [BoardSize][BoardSize]rune{
-			{'-', '-', '-'},
-			{'-', '-', '-'},
-			{'-', '-', '-'},
+			{EmptyCell, EmptyCell, EmptyCell},
+			{EmptyCell, EmptyCell, EmptyCell},
+			{EmptyCell, EmptyCell, EmptyCell},
 		},
 	}
 }
@@ -38,7 +39,7 @@ func (b *Board) SetBoard(board [BoardSize][BoardSize]rune) {
 
 func (b *Board) PlaceToken(symbol rune, coor Coordinate) error {
 
-	if b.board[coor.row][coor.col] != '-' {
+	if !b.isEmptyCell(coor) {
 		return NewGameError(ErrPositionOccupied,
 			FormatPositionTaken(coor.row, coor.col))
 	}
@@ -51,8 +52,9 @@ func (b *Board) GetTokenBy(symbol rune) []Coordinate {
 	var coordinates []Coordinate
 	for i := boardInterval.Min(); i <= boardInterval.Max(); i++ {
 		for j := boardInterval.Min(); j <= boardInterval.Max(); j++ {
-			if b.board[i][j] == symbol {
-				coordinates = append(coordinates, Coordinate{i, j})
+			coor, _ := NewCoordinate(i, j)
+			if b.IsOccupiedCellBy(coor, symbol) {
+				coordinates = append(coordinates, coor)
 			}
 		}
 	}
@@ -62,12 +64,21 @@ func (b *Board) GetTokenBy(symbol rune) []Coordinate {
 func (b *Board) FullBoard() bool {
 	for i := boardInterval.Min(); i <= boardInterval.Max(); i++ {
 		for j := boardInterval.Min(); j <= boardInterval.Max(); j++ {
-			if b.board[i][j] == '-' {
+			coor, _ := NewCoordinate(i, j)
+			if b.isEmptyCell(coor) {
 				return false
 			}
 		}
 	}
 	return true
+}
+
+func (b *Board) IsOccupiedCellBy(coor Coordinate, symbol rune) bool {
+	return b.board[coor.row][coor.col] == symbol
+}
+
+func (b *Board) isEmptyCell(coor Coordinate) bool {
+	return b.IsOccupiedCellBy(coor, EmptyCell)
 }
 
 func (b *Board) Print() {
