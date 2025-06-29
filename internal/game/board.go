@@ -1,8 +1,6 @@
 package game
 
-import (
-	"github.com/thotluna/ttt/internal/view"
-)
+import "github.com/thotluna/ttt/internal/view"
 
 var (
 	boardInterval = NewGameInterval()
@@ -10,18 +8,17 @@ var (
 
 const (
 	BoardSize = 3
-	EmptyCell = '-'
 )
 
 type Board struct {
-	board [BoardSize][BoardSize]rune
+	board [BoardSize][BoardSize]SymbolPlayerCurrent
 	io    view.IO
 }
 
 func NewBoard(io view.IO) *Board {
 	return &Board{
 		io: io,
-		board: [BoardSize][BoardSize]rune{
+		board: [BoardSize][BoardSize]SymbolPlayerCurrent{
 			{EmptyCell, EmptyCell, EmptyCell},
 			{EmptyCell, EmptyCell, EmptyCell},
 			{EmptyCell, EmptyCell, EmptyCell},
@@ -29,15 +26,15 @@ func NewBoard(io view.IO) *Board {
 	}
 }
 
-func (b *Board) GetBoard() [BoardSize][BoardSize]rune {
+func (b *Board) GetBoard() [BoardSize][BoardSize]SymbolPlayerCurrent {
 	return b.board
 }
 
-func (b *Board) SetBoard(board [BoardSize][BoardSize]rune) {
+func (b *Board) SetBoard(board [BoardSize][BoardSize]SymbolPlayerCurrent) {
 	b.board = board
 }
 
-func (b *Board) PlaceToken(symbol rune, coor Coordinate) error {
+func (b *Board) PlaceToken(symbol SymbolPlayerCurrent, coor Coordinate) error {
 
 	if !b.isEmptyCell(coor) {
 		return NewGameError(ErrPositionOccupied,
@@ -48,7 +45,7 @@ func (b *Board) PlaceToken(symbol rune, coor Coordinate) error {
 	return nil
 }
 
-func (b *Board) GetTokenBy(symbol rune) []Coordinate {
+func (b *Board) GetTokenBy(symbol SymbolPlayerCurrent) []Coordinate {
 	var coordinates []Coordinate
 	for i := boardInterval.Min(); i <= boardInterval.Max(); i++ {
 		for j := boardInterval.Min(); j <= boardInterval.Max(); j++ {
@@ -73,7 +70,7 @@ func (b *Board) FullBoard() bool {
 	return true
 }
 
-func (b *Board) IsOccupiedCellBy(coor Coordinate, symbol rune) bool {
+func (b *Board) IsOccupiedCellBy(coor Coordinate, symbol SymbolPlayerCurrent) bool {
 	return b.board[coor.row][coor.col] == symbol
 }
 
@@ -82,5 +79,11 @@ func (b *Board) isEmptyCell(coor Coordinate) bool {
 }
 
 func (b *Board) Print() {
-	b.io.PrintBoard(b.board)
+	var runeBoard [BoardSize][BoardSize]rune
+	for i, row := range b.board {
+		for j, cell := range row {
+			runeBoard[i][j] = rune(cell)
+		}
+	}
+	b.io.PrintBoard(runeBoard)
 }

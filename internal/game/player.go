@@ -2,6 +2,7 @@ package game
 
 import (
 	"fmt"
+
 	"github.com/thotluna/ttt/internal/view"
 )
 
@@ -11,12 +12,12 @@ const (
 )
 
 type Player struct {
-	symbol rune
+	symbol SymbolPlayerCurrent
 	board  *Board
 	input  *PlayerInput
 }
 
-func NewPlayer(symbol rune, io view.IO, board *Board) *Player {
+func NewPlayer(symbol SymbolPlayerCurrent, io view.IO, board *Board) *Player {
 	return &Player{
 		symbol: symbol,
 		board:  board,
@@ -78,7 +79,3 @@ func (p *Player) hasWinningLine(tokens []Coordinate) bool {
 
 	return false
 }
-
-
-
-

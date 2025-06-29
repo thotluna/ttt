@@ -5,23 +5,21 @@ import (
 )
 
 type Game struct {
-	turn    Turn
-	board   *Board
-	Players []*Player
-	io      view.IO
+	turn  Turn
+	board *Board
+	io    view.IO
 }
 
 func NewGame(io view.IO) Game {
 	board := NewBoard(io)
-	players := []*Player{
-		NewPlayer('X', io, board),
-		NewPlayer('O', io, board),
+	players := map[SymbolPlayerCurrent]Player{
+		PlayerX: *NewPlayer(PlayerX, io, board),
+		PlayerO: *NewPlayer(PlayerO, io, board),
 	}
 	return Game{
-		turn:    NewTurn(players, io),
-		board:   board,
-		Players: players,
-		io:      io,
+		turn:  NewTurn(players, io),
+		board: board,
+		io:    io,
 	}
 }
 
