@@ -9,36 +9,44 @@ const (
 )
 
 type Turn struct {
-	turn    int
-	players []*Player
+	symbol  SymbolPlayerCurrent
+	players map[SymbolPlayerCurrent]*Player
 	io      view.IO
 }
 
 func NewTurn(players []*Player, io view.IO) Turn {
 	return Turn{
-		turn:    0,
-		players: players,
-		io:      io,
+		symbol: PlayerX,
+		players: map[SymbolPlayerCurrent]*Player{
+			PlayerX: players[0],
+			PlayerO: players[1],
+		},
+		io: io,
 	}
 }
 
 func (t *Turn) TurnChange() {
-	t.turn = (t.turn + 1) % NumberOfPlayers
+	switch t.symbol {
+	case PlayerX:
+		t.symbol = PlayerO
+	case PlayerO:
+		t.symbol = PlayerX
+	}
 }
 
 func (t *Turn) GetTurn() (int, rune) {
-	switch t.turn {
-	case PlayerXIndex:
-		return PlayerXIndex, 'X'
-	case PlayerOIndex:
-		return PlayerOIndex, 'O'
+	switch t.symbol {
+	case PlayerX:
+		return PlayerXIndex, rune(PlayerX)
+	case PlayerO:
+		return PlayerOIndex, rune(PlayerO)
 	default:
-		return PlayerXIndex, 'X'
+		return PlayerXIndex, rune(PlayerX)
 	}
 }
 
 func (t *Turn) GetCurrentPlayer() *Player {
-	return t.players[t.turn]
+	return t.players[t.symbol]
 }
 
 func (t *Turn) PrintTurn() {

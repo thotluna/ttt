@@ -10,75 +10,60 @@ import (
 func TestNewTurn(t *testing.T) {
 	mock := testutils.NewMockIO()
 	players := []*game.Player{
-		game.NewPlayer('X', mock, nil),
-		game.NewPlayer('O', mock, nil),
+		game.NewPlayer(rune(game.PlayerX), mock, nil),
+		game.NewPlayer(rune(game.PlayerO), mock, nil),
 	}
 
 	turn := game.NewTurn(players, mock)
-	indexPlayer, _ := turn.GetTurn()
-	if indexPlayer != 0 {
-		t.Errorf("Expected initial turn to be 0, got %d", indexPlayer)
-	}
-}
-
-func TestGetTurn_InitialPlayer(t *testing.T) {
-	mock := testutils.NewMockIO()
-	players := []*game.Player{
-		game.NewPlayer('X', mock, nil),
-		game.NewPlayer('O', mock, nil),
-	}
-
-	turn := game.NewTurn(players, mock)
-	indexPlayer, player := turn.GetTurn()
-
-	if indexPlayer != 0 || player != 'X' {
-		t.Errorf("Expected (0, 'X'), got (%d, %c)", indexPlayer, player)
+	_, player := turn.GetTurn()
+	if player != 'X' {
+		t.Errorf("Expected 'X', got %c", player)
 	}
 }
 
 func TestTurnChange_SingleChange(t *testing.T) {
 	mock := testutils.NewMockIO()
 	players := []*game.Player{
-		game.NewPlayer('X', mock, nil),
-		game.NewPlayer('O', mock, nil),
+		game.NewPlayer(rune(game.PlayerX), mock, nil),
+		game.NewPlayer(rune(game.PlayerO), mock, nil),
 	}
 
 	turn := game.NewTurn(players, mock)
 	turn.TurnChange()
 
-	indexPlayer, player := turn.GetTurn()
-	if indexPlayer != 1 || player != 'O' {
-		t.Errorf("After one change, expected (1, 'O'), got (%d, %c)", indexPlayer, player)
+	_, player := turn.GetTurn()
+	if player != 'O' {
+		t.Errorf("After one change, expected 'O', got %c", player)
 	}
 }
 
 func TestTurnChange_MultipleChanges(t *testing.T) {
 	mock := testutils.NewMockIO()
 	players := []*game.Player{
-		game.NewPlayer('X', mock, nil),
-		game.NewPlayer('O', mock, nil),
+		game.NewPlayer(rune(game.PlayerX), mock, nil),
+		game.NewPlayer(rune(game.PlayerO), mock, nil),
 	}
 
 	turn := game.NewTurn(players, mock)
 
 	turn.TurnChange()
-	indexPlayer, player := turn.GetTurn()
-	if indexPlayer != 1 || player != 'O' {
-		t.Errorf("After first change, expected (1, 'O'), got (%d, %c)", indexPlayer, player)
+	_, player := turn.GetTurn()
+	if player != 'O' {
+		t.Errorf("After first change, expected 'O', got %c", player)
 	}
 
 	turn.TurnChange()
-	indexPlayer, player = turn.GetTurn()
-	if indexPlayer != 0 || player != 'X' {
-		t.Errorf("After second change, expected (0, 'X'), got (%d, %c)", indexPlayer, player)
+	_, player = turn.GetTurn()
+	if player != 'X' {
+		t.Errorf("After second change, expected 'X', got %c", player)
 	}
 }
 
 func TestTurnChange_MultiplePlayers(t *testing.T) {
 	mock := testutils.NewMockIO()
 	players := []*game.Player{
-		game.NewPlayer('X', mock, nil),
-		game.NewPlayer('O', mock, nil),
+		game.NewPlayer(rune(game.PlayerX), mock, nil),
+		game.NewPlayer(rune(game.PlayerO), mock, nil),
 	}
 
 	turn := game.NewTurn(players, mock)
@@ -97,10 +82,9 @@ func TestTurnChange_MultiplePlayers(t *testing.T) {
 		if i > 0 {
 			turn.TurnChange()
 		}
-		turnNum, symbol := turn.GetTurn()
-		if turnNum != tc.expectedNum || symbol != tc.expectedRune {
-			t.Errorf("After %d changes, expected (%d, %c), got (%d, %c)",
-				i, tc.expectedNum, tc.expectedRune, turnNum, symbol)
+		_, symbol := turn.GetTurn()
+		if symbol != tc.expectedRune {
+			t.Errorf("After %d changes, expected %c, got %c", i, tc.expectedRune, symbol)
 		}
 	}
 }
