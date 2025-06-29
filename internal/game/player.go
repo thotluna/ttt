@@ -8,6 +8,11 @@ import (
 	"github.com/thotluna/ttt/internal/view"
 )
 
+const (
+	MinNumberTokensWin = 3
+	partOfCoordinate   = 2
+)
+
 type Player struct {
 	symbol rune
 	io     view.IO
@@ -44,11 +49,16 @@ func (p *Player) Play() bool {
 
 func (p *Player) CheckWin() bool {
 	tokens := p.board.GetTokenBy(p.symbol)
-	if len(tokens) < 3 {
+	if len(tokens) < MinNumberTokensWin {
 
 		return false
 	}
 
+	return p.hasWinningLine(tokens)
+
+}
+
+func (p *Player) hasWinningLine(tokens []Coordinate) bool {
 	direction := make(map[Direction]int)
 
 	for i := 0; i < len(tokens); i++ {
@@ -61,7 +71,7 @@ func (p *Player) CheckWin() bool {
 	}
 
 	for _, v := range direction {
-		if v >= 3 {
+		if v >= MinNumberTokensWin {
 			p.io.PrintLine(fmt.Sprintf(MsgPlayerWins, p.symbol))
 			return true
 		}
@@ -77,7 +87,7 @@ func (p *Player) readInput() (int, int) {
 		input := p.io.ReadInput()
 		input = strings.TrimSpace(input)
 		parts := strings.Split(input, ".")
-		if len(parts) != 2 {
+		if len(parts) != partOfCoordinate {
 			p.io.PrintLine(NewGameError(ErrInvalidInput, MsgInvalidFormat).Error())
 			continue
 		}
@@ -94,7 +104,7 @@ func (p *Player) readInput() (int, int) {
 			continue
 		}
 
-		if row < 0 || row > 2 || col < 0 || col > 2 {
+		if row < 0 || row >= NumberRows || col < 0 || col >= NumberCols {
 			p.io.PrintLine(NewGameError(ErrOutOfBounds, MsgOutOfBounds).Error())
 			continue
 		}

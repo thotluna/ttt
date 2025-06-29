@@ -19,7 +19,7 @@ type Coordinate struct {
 }
 
 func NewCoordinate(row, col int) (Coordinate, error) {
-	if row < 0 || row > 2 || col < 0 || col > 2 {
+	if row < 0 || row >= NumberRows || col < 0 || col >= NumberCols {
 		return Coordinate{}, NewGameError(ErrOutOfBounds, fmt.Sprintf(MsgPositionOutOfBounds, row, col))
 	}
 	return Coordinate{row: row, col: col}, nil
@@ -34,7 +34,7 @@ func (c Coordinate) Col() int {
 }
 
 func (c Coordinate) IsValid() bool {
-	return c.row >= 0 && c.row <= 2 && c.col >= 0 && c.col <= 2
+	return c.row >= 0 && c.row < NumberRows && c.col >= 0 && c.col < NumberCols
 }
 
 func (c Coordinate) Equals(other Coordinate) bool {
@@ -56,7 +56,7 @@ func (c Coordinate) IsDiagonalTo(other Coordinate) bool {
 
 func (c Coordinate) IsInverterTo(other Coordinate) bool {
 	// Están en la misma diagonal inversa (de esquina a esquina)
-	return (c.row+c.col == 2) && (other.row+other.col == 2) && (c.row != other.row)
+	return (c.row+c.col == NumberRows-1) && (other.row+other.col == NumberRows-1) && (c.row != other.row)
 }
 
 func (c Coordinate) Direction(other Coordinate) Direction {

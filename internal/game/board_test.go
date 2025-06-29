@@ -11,8 +11,8 @@ import (
 func TestNewBoard(t *testing.T) {
 	mockIO := &testutils.MockIO{}
 	board := game.NewBoard(mockIO)
-	for i := 0; i < 3; i++ {
-		for j := 0; j < 3; j++ {
+	for i := 0; i < game.NumberRows; i++ {
+		for j := 0; j < game.NumberCols; j++ {
 			if board.GetBoard()[i][j] != '-' {
 				t.Errorf("Expected '-' at position [%d][%d], got %c", i, j, board.GetBoard()[i][j])
 			}

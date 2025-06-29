@@ -4,15 +4,20 @@ import (
 	"github.com/thotluna/ttt/internal/view"
 )
 
+const (
+	NumberRows = 3
+	NumberCols = 3
+)
+
 type Board struct {
-	board [3][3]rune
+	board [NumberRows][NumberCols]rune
 	io    view.IO
 }
 
 func NewBoard(io view.IO) *Board {
 	return &Board{
 		io: io,
-		board: [3][3]rune{
+		board: [NumberRows][NumberCols]rune{
 			{'-', '-', '-'},
 			{'-', '-', '-'},
 			{'-', '-', '-'},
@@ -20,16 +25,16 @@ func NewBoard(io view.IO) *Board {
 	}
 }
 
-func (b *Board) GetBoard() [3][3]rune {
+func (b *Board) GetBoard() [NumberRows][NumberCols]rune {
 	return b.board
 }
 
-func (b *Board) SetBoard(board [3][3]rune) {
+func (b *Board) SetBoard(board [NumberRows][NumberCols]rune) {
 	b.board = board
 }
 
 func (b *Board) PlaceToken(symbol rune, coor Coordinate) error {
-	if coor.row < 0 || coor.row >= 3 || coor.col < 0 || coor.col >= 3 {
+	if coor.row < 0 || coor.row >= NumberRows || coor.col < 0 || coor.col >= NumberCols {
 		return NewGameError(ErrOutOfBounds, FormatPositionOutOfBounds(coor.row, coor.col))
 	}
 
@@ -44,8 +49,8 @@ func (b *Board) PlaceToken(symbol rune, coor Coordinate) error {
 
 func (b *Board) GetTokenBy(symbol rune) []Coordinate {
 	var coordinates []Coordinate
-	for i := 0; i < 3; i++ {
-		for j := 0; j < 3; j++ {
+	for i := 0; i < NumberRows; i++ {
+		for j := 0; j < NumberCols; j++ {
 			if b.board[i][j] == symbol {
 				coordinates = append(coordinates, Coordinate{i, j})
 			}
@@ -55,8 +60,8 @@ func (b *Board) GetTokenBy(symbol rune) []Coordinate {
 }
 
 func (b *Board) FullBoard() bool {
-	for i := 0; i < 3; i++ {
-		for j := 0; j < 3; j++ {
+	for i := 0; i < NumberRows; i++ {
+		for j := 0; j < NumberCols; j++ {
 			if b.board[i][j] == '-' {
 				return false
 			}

@@ -2,6 +2,12 @@ package game
 
 import "github.com/thotluna/ttt/internal/view"
 
+const (
+	PlayerXIndex    = 0
+	PlayerOIndex    = 1
+	NumberOfPlayers = 2
+)
+
 type Turn struct {
 	turn    int
 	players []*Player
@@ -17,17 +23,17 @@ func NewTurn(players []*Player, io view.IO) Turn {
 }
 
 func (t *Turn) TurnChange() {
-	t.turn = (t.turn + 1) % 2
+	t.turn = (t.turn + 1) % NumberOfPlayers
 }
 
 func (t *Turn) GetTurn() (int, rune) {
 	switch t.turn {
-	case 0:
-		return 0, 'X'
-	case 1:
-		return 1, 'O'
+	case PlayerXIndex:
+		return PlayerXIndex, 'X'
+	case PlayerOIndex:
+		return PlayerOIndex, 'O'
 	default:
-		return 0, 'X'
+		return PlayerXIndex, 'X'
 	}
 }
 
