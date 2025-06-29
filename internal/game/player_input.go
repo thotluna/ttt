@@ -61,5 +61,10 @@ func (p *PlayerInput) parseCoordinate(input string) (int, int, error) {
 		return 0, 0, NewGameError(ErrInvalidInput, MsgColMustBeNumber)
 	}
 
+	interval := NewGameInterval()
+	if !interval.Contains(row) || !interval.Contains(col) {
+		return 0, 0, NewGameError(ErrOutOfBounds, MsgOutOfBounds)
+	}
+
 	return row, col, nil
 }

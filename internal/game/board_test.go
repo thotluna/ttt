@@ -11,10 +11,11 @@ import (
 func TestNewBoard(t *testing.T) {
 	mockIO := &testutils.MockIO{}
 	board := game.NewBoard(mockIO)
-	for i := 0; i < game.NumberRows; i++ {
-		for j := 0; j < game.NumberCols; j++ {
-			if board.GetBoard()[i][j] != '-' {
-				t.Errorf("Expected '-' at position [%d][%d], got %c", i, j, board.GetBoard()[i][j])
+	boardData := board.GetBoard()
+	for i := 0; i < game.BoardSize; i++ {
+		for j := 0; j < game.BoardSize; j++ {
+			if boardData[i][j] != '-' {
+				t.Errorf("Expected '-' at position [%d][%d], got %c", i, j, boardData[i][j])
 			}
 		}
 	}
@@ -25,11 +26,12 @@ func TestPlaceToken(t *testing.T) {
 	board := game.NewBoard(mockIO)
 	coor, _ := game.NewCoordinate(1, 1)
 	board.PlaceToken('X', coor)
-	if board.GetBoard()[1][1] != 'X' {
+	boardData := board.GetBoard()
+	if boardData[1][1] != 'X' {
 		t.Error("Token not placed correctly at [1][1]")
 	}
 
-	if board.GetBoard()[0][0] != '-' || board.GetBoard()[2][2] != '-' {
+	if boardData[0][0] != '-' || boardData[2][2] != '-' {
 		t.Error("Other cells should remain empty")
 	}
 }
@@ -142,10 +144,11 @@ func TestGetBoardReturnsCopy(t *testing.T) {
 	board := game.NewBoard(mockIO)
 
 	boardCopy := board.GetBoard()
-
 	boardCopy[0][0] = 'X'
 
-	if board.GetBoard()[0][0] != '-' {
+	// Obtener una nueva copia para verificar
+	boardData := board.GetBoard()
+	if boardData[0][0] != '-' {
 		t.Error("GetBoard() should return a copy of the board, not a reference")
 	}
 }

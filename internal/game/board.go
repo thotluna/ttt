@@ -4,20 +4,23 @@ import (
 	"github.com/thotluna/ttt/internal/view"
 )
 
+var (
+	boardInterval = NewGameInterval()
+)
+
 const (
-	NumberRows = 3
-	NumberCols = 3
+	BoardSize = 3
 )
 
 type Board struct {
-	board [NumberRows][NumberCols]rune
+	board [BoardSize][BoardSize]rune
 	io    view.IO
 }
 
 func NewBoard(io view.IO) *Board {
 	return &Board{
 		io: io,
-		board: [NumberRows][NumberCols]rune{
+		board: [BoardSize][BoardSize]rune{
 			{'-', '-', '-'},
 			{'-', '-', '-'},
 			{'-', '-', '-'},
@@ -25,18 +28,15 @@ func NewBoard(io view.IO) *Board {
 	}
 }
 
-func (b *Board) GetBoard() [NumberRows][NumberCols]rune {
+func (b *Board) GetBoard() [BoardSize][BoardSize]rune {
 	return b.board
 }
 
-func (b *Board) SetBoard(board [NumberRows][NumberCols]rune) {
+func (b *Board) SetBoard(board [BoardSize][BoardSize]rune) {
 	b.board = board
 }
 
 func (b *Board) PlaceToken(symbol rune, coor Coordinate) error {
-	if coor.row < 0 || coor.row >= NumberRows || coor.col < 0 || coor.col >= NumberCols {
-		return NewGameError(ErrOutOfBounds, FormatPositionOutOfBounds(coor.row, coor.col))
-	}
 
 	if b.board[coor.row][coor.col] != '-' {
 		return NewGameError(ErrPositionOccupied,
@@ -49,8 +49,8 @@ func (b *Board) PlaceToken(symbol rune, coor Coordinate) error {
 
 func (b *Board) GetTokenBy(symbol rune) []Coordinate {
 	var coordinates []Coordinate
-	for i := 0; i < NumberRows; i++ {
-		for j := 0; j < NumberCols; j++ {
+	for i := boardInterval.Min(); i <= boardInterval.Max(); i++ {
+		for j := boardInterval.Min(); j <= boardInterval.Max(); j++ {
 			if b.board[i][j] == symbol {
 				coordinates = append(coordinates, Coordinate{i, j})
 			}
@@ -60,8 +60,8 @@ func (b *Board) GetTokenBy(symbol rune) []Coordinate {
 }
 
 func (b *Board) FullBoard() bool {
-	for i := 0; i < NumberRows; i++ {
-		for j := 0; j < NumberCols; j++ {
+	for i := boardInterval.Min(); i <= boardInterval.Max(); i++ {
+		for j := boardInterval.Min(); j <= boardInterval.Max(); j++ {
 			if b.board[i][j] == '-' {
 				return false
 			}
