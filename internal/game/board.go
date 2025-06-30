@@ -29,29 +29,24 @@ func NewBoard(io view.IO) *Board {
 }
 
 func (b *Board) PlaceToken(symbol Symbol, origin, destination *Coordinate) error {
-
 	if origin != nil {
 		if b.isEmptyCell(*origin) {
-			return NewGameError(ErrEmptyCell,
-				FormatPositionTaken(origin.row, origin.col))
+			return NewGameError(ErrNoTokenAtPosition, MsgNoTokenAtPosition)
 		}
 
 		if !b.IsCellOccupiedBy(*origin, symbol) {
-			return NewGameError(ErrPositionOccupied,
-				FormatPositionTaken(origin.row, origin.col))
+			return NewGameError(ErrNotYourToken, MsgNotYourToken)
 		}
 
 		if origin.Equals(*destination) {
-			return NewGameError(ErrPositionOccupied,
-				FormatPositionTaken(origin.row, origin.col))
+			return NewGameError(ErrSamePosition, MsgSamePosition)
 		}
 
 		b.board[origin.row][origin.col] = EmptyCell
 	}
 
 	if !b.isEmptyCell(*destination) {
-		return NewGameError(ErrPositionOccupied,
-			FormatPositionTaken(destination.row, destination.col))
+		return NewGameError(ErrPositionOccupied, MsgDestinationOccupied)
 	}
 
 	b.board[destination.row][destination.col] = symbol

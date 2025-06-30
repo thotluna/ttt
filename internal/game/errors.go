@@ -17,8 +17,14 @@ const (
 	ErrPositionOccupied
 	// ErrOutOfBounds represents an attempt to access a position outside the board
 	ErrOutOfBounds
-
+	// ErrEmptyCell represents an attempt to access an empty cell
 	ErrEmptyCell
+	// ErrNotYourToken represents an attempt to move an opponent's token
+	ErrNotYourToken
+	// ErrNoTokenAtPosition represents an attempt to move from an empty position
+	ErrNoTokenAtPosition
+	// ErrSamePosition represents an attempt to move to the same position
+	ErrSamePosition
 )
 
 // Los mensajes de error están definidos en messages.go
@@ -47,6 +53,12 @@ func NewGameError(code ErrorCode, details string) *GameError {
 		err.Message = MsgOutOfBoundsError
 	case ErrEmptyCell:
 		err.Message = MsgEmptyCellError
+	case ErrNotYourToken:
+		err.Message = MsgNotYourToken
+	case ErrNoTokenAtPosition:
+		err.Message = MsgNoTokenAtPosition
+	case ErrSamePosition:
+		err.Message = MsgSamePosition
 	default:
 		err.Message = MsgUnknownError
 	}

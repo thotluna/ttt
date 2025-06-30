@@ -32,7 +32,7 @@ func (p *Player) Play() bool {
 		var origin *Coordinate
 		var err error
 		if p.move >= 3 {
-			p.input.io.PrintLine("Coordenadas de ficha a mover")
+			p.input.io.PrintLine(MsgMoveTokenPrompt)
 
 			originRaw, err := p.input.GetMove()
 			origin = &originRaw
@@ -44,7 +44,7 @@ func (p *Player) Play() bool {
 			origin = nil
 		}
 
-		p.input.io.PrintLine("Coordenadas de ficha a poner")
+		p.input.io.PrintLine(MsgPlaceTokenPrompt)
 		destination, err := p.input.GetMove()
 		if err != nil {
 			continue
