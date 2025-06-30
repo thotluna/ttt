@@ -36,7 +36,7 @@ func (g *Game) Play() {
 			return
 		}
 
-		if g.board.FullBoard() {
+		if g.board.IsFull() {
 			g.board.Print()
 			g.io.PrintLine(MsgGameDraw)
 			return

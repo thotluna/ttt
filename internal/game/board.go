@@ -42,7 +42,7 @@ func (b *Board) GetTokenBy(symbol Symbol) []Coordinate {
 	for i := boardInterval.Min(); i <= boardInterval.Max(); i++ {
 		for j := boardInterval.Min(); j <= boardInterval.Max(); j++ {
 			coor, _ := NewCoordinate(i, j)
-			if b.IsOccupiedCellBy(coor, symbol) {
+			if b.IsCellOccupiedBy(coor, symbol) {
 				coordinates = append(coordinates, coor)
 			}
 		}
@@ -50,7 +50,7 @@ func (b *Board) GetTokenBy(symbol Symbol) []Coordinate {
 	return coordinates
 }
 
-func (b *Board) FullBoard() bool {
+func (b *Board) IsFull() bool {
 	for i := boardInterval.Min(); i <= boardInterval.Max(); i++ {
 		for j := boardInterval.Min(); j <= boardInterval.Max(); j++ {
 			coor, _ := NewCoordinate(i, j)
@@ -62,12 +62,12 @@ func (b *Board) FullBoard() bool {
 	return true
 }
 
-func (b *Board) IsOccupiedCellBy(coor Coordinate, symbol Symbol) bool {
+func (b *Board) IsCellOccupiedBy(coor Coordinate, symbol Symbol) bool {
 	return b.board[coor.row][coor.col] == symbol
 }
 
 func (b *Board) isEmptyCell(coor Coordinate) bool {
-	return b.IsOccupiedCellBy(coor, EmptyCell)
+	return b.board[coor.row][coor.col] == EmptyCell
 }
 
 func (b *Board) Print() {

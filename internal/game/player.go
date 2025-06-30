@@ -7,7 +7,7 @@ import (
 )
 
 const (
-	MinNumberTokensWin = 3
+	MinTokensForWin = 3
 )
 
 type Player struct {
@@ -26,7 +26,7 @@ func NewPlayer(symbol Symbol, io view.IO, board *Board) *Player {
 
 func (p *Player) Play() bool {
 	for {
-		if p.board.FullBoard() {
+		if p.board.IsFull() {
 			p.input.io.PrintLine(MsgGameDraw)
 			return false
 		}
@@ -48,7 +48,7 @@ func (p *Player) Play() bool {
 
 func (p *Player) CheckWin() bool {
 	tokens := p.board.GetTokenBy(p.symbol)
-	if len(tokens) < MinNumberTokensWin {
+	if len(tokens) < MinTokensForWin {
 
 		return false
 	}
@@ -70,7 +70,7 @@ func (p *Player) hasWinningLine(tokens []Coordinate) bool {
 	}
 
 	for _, v := range direction {
-		if v >= MinNumberTokensWin {
+		if v >= MinTokensForWin {
 			p.input.io.PrintLine(fmt.Sprintf(MsgPlayerWins, p.symbol))
 			return true
 		}

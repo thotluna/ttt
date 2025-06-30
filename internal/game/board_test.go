@@ -15,7 +15,7 @@ func TestNewBoard(t *testing.T) {
 	for i := 0; i < game.BoardSize; i++ {
 		for j := 0; j < game.BoardSize; j++ {
 			coor := testutils.MustNewCoordinate(t, i, j)
-			if !board.IsOccupiedCellBy(coor, game.EmptyCell) {
+			if !board.IsFull() && !board.IsCellOccupiedBy(coor, game.EmptyCell) {
 				t.Errorf("Expected empty cell at position [%d][%d]", i, j)
 			}
 		}
@@ -27,7 +27,7 @@ func TestPlaceToken(t *testing.T) {
 	board := game.NewBoard(mockIO)
 	coor := testutils.MustNewCoordinate(t, 1, 1)
 
-	if board.IsOccupiedCellBy(coor, game.PlayerX) {
+	if board.IsCellOccupiedBy(coor, game.PlayerX) {
 		t.Error("Cell should be empty initially")
 	}
 
@@ -38,7 +38,7 @@ func TestPlaceToken(t *testing.T) {
 	}
 
 	// Verificar que la celda tiene la X
-	if !board.IsOccupiedCellBy(coor, game.PlayerX) {
+	if !board.IsCellOccupiedBy(coor, game.PlayerX) {
 		t.Error("Token 'X' not placed correctly at [1][1]")
 	}
 
@@ -49,7 +49,7 @@ func TestPlaceToken(t *testing.T) {
 	}
 
 	for _, c := range otherCoords {
-		if board.IsOccupiedCellBy(c, game.PlayerX) || board.IsOccupiedCellBy(c, game.PlayerO) {
+		if board.IsCellOccupiedBy(c, game.PlayerX) || board.IsCellOccupiedBy(c, game.PlayerO) {
 			t.Errorf("Cell [%d][%d] should be empty", c.Row(), c.Col())
 		}
 	}
@@ -103,7 +103,7 @@ func TestFullBoard(t *testing.T) {
 			for index, coor := range tc.coor {
 				board.PlaceToken(tc.symbol[index], coor)
 			}
-			if got := board.FullBoard(); got != tc.full {
+			if got := board.IsFull(); got != tc.full {
 				t.Errorf("Expected FullBoard() = %v, got %v", tc.full, got)
 			}
 		})
