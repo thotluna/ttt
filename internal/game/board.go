@@ -1,6 +1,8 @@
 package game
 
-import "github.com/thotluna/ttt/internal/view"
+import (
+	"github.com/thotluna/ttt/internal/view"
+)
 
 var (
 	boardInterval = NewGameInterval()
@@ -26,14 +28,26 @@ func NewBoard(io view.IO) *Board {
 	}
 }
 
-func (b *Board) PlaceToken(symbol Symbol, coor Coordinate) error {
+func (b *Board) PlaceToken(symbol Symbol, origin, destination *Coordinate) error {
 
-	if !b.isEmptyCell(coor) {
-		return NewGameError(ErrPositionOccupied,
-			FormatPositionTaken(coor.row, coor.col))
+	if origin != nil && !b.isEmptyCell(*origin) {
+		if b.isEmptyCell(*origin) {
+			return NewGameError(ErrEmptyCell,
+				FormatPositionTaken(origin.row, origin.col))
+		}
+
+		if !b.IsCellOccupiedBy(*origin, symbol) {
+			return NewGameError(ErrPositionOccupied,
+				FormatPositionTaken(origin.row, origin.col))
+		}
 	}
 
-	b.board[coor.row][coor.col] = symbol
+	if !b.isEmptyCell(*destination) {
+		return NewGameError(ErrPositionOccupied,
+			FormatPositionTaken(destination.row, destination.col))
+	}
+
+	b.board[destination.row][destination.col] = symbol
 	return nil
 }
 

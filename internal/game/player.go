@@ -14,6 +14,7 @@ type Player struct {
 	symbol Symbol
 	board  *Board
 	input  *PlayerInput
+	move   int
 }
 
 func NewPlayer(symbol Symbol, io view.IO, board *Board) *Player {
@@ -21,28 +22,42 @@ func NewPlayer(symbol Symbol, io view.IO, board *Board) *Player {
 		symbol: symbol,
 		board:  board,
 		input:  NewPlayerInput(io),
+		move:   0,
 	}
 }
 
 func (p *Player) Play() bool {
 	for {
-		if p.board.IsFull() {
-			p.input.io.PrintLine(MsgGameDraw)
-			return false
+
+		var origin *Coordinate
+		var err error
+		if p.move >= 3 {
+			p.input.io.PrintLine("Coordenadas de ficha a mover")
+
+			originRaw, err := p.input.GetMove()
+			origin = &originRaw
+			if err != nil {
+				continue
+			}
+
+		} else {
+			origin = nil
 		}
 
-		coord, err := p.input.GetMove()
+		p.input.io.PrintLine("Coordenadas de ficha a poner")
+		destination, err := p.input.GetMove()
 		if err != nil {
 			continue
 		}
 
-		err = p.board.PlaceToken(p.symbol, coord)
+		err = p.board.PlaceToken(p.symbol, origin, &destination)
 		if err != nil {
 			p.input.io.PrintLine(err.Error())
 			continue
 		}
 		break
 	}
+	p.move++
 	return p.CheckWin()
 }
 
@@ -77,4 +92,8 @@ func (p *Player) hasWinningLine(tokens []Coordinate) bool {
 	}
 
 	return false
+}
+
+func (p *Player) MoveCount() int {
+	return p.move
 }

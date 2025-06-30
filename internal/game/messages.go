@@ -24,6 +24,7 @@ const (
 	MsgInvalidInputError = "invalid input"
 	MsgPositionOccupied  = "position is already taken"
 	MsgOutOfBoundsError  = "position is out of bounds"
+	MsgEmptyCellError    = "position is empty"
 	MsgUnknownError      = "unknown error"
 )
 

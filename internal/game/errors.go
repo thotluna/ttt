@@ -17,6 +17,8 @@ const (
 	ErrPositionOccupied
 	// ErrOutOfBounds represents an attempt to access a position outside the board
 	ErrOutOfBounds
+
+	ErrEmptyCell
 )
 
 // Los mensajes de error están definidos en messages.go
@@ -43,6 +45,8 @@ func NewGameError(code ErrorCode, details string) *GameError {
 		err.Message = MsgPositionOccupied
 	case ErrOutOfBounds:
 		err.Message = MsgOutOfBoundsError
+	case ErrEmptyCell:
+		err.Message = MsgEmptyCellError
 	default:
 		err.Message = MsgUnknownError
 	}
