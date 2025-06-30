@@ -8,11 +8,7 @@ import (
 )
 
 func TestNewTurn(t *testing.T) {
-	mock := testutils.NewMockIO()
-	players := []*game.Player{
-		game.NewPlayer(rune(game.PlayerX), mock, nil),
-		game.NewPlayer(rune(game.PlayerO), mock, nil),
-	}
+	mock, players := createMapPlayers()
 
 	turn := game.NewTurn(players, mock)
 	_, player := turn.GetTurn()
@@ -22,11 +18,7 @@ func TestNewTurn(t *testing.T) {
 }
 
 func TestTurnChange_SingleChange(t *testing.T) {
-	mock := testutils.NewMockIO()
-	players := []*game.Player{
-		game.NewPlayer(rune(game.PlayerX), mock, nil),
-		game.NewPlayer(rune(game.PlayerO), mock, nil),
-	}
+	mock, players := createMapPlayers()
 
 	turn := game.NewTurn(players, mock)
 	turn.TurnChange()
@@ -38,11 +30,7 @@ func TestTurnChange_SingleChange(t *testing.T) {
 }
 
 func TestTurnChange_MultipleChanges(t *testing.T) {
-	mock := testutils.NewMockIO()
-	players := []*game.Player{
-		game.NewPlayer(rune(game.PlayerX), mock, nil),
-		game.NewPlayer(rune(game.PlayerO), mock, nil),
-	}
+	mock, players := createMapPlayers()
 
 	turn := game.NewTurn(players, mock)
 
@@ -60,11 +48,7 @@ func TestTurnChange_MultipleChanges(t *testing.T) {
 }
 
 func TestTurnChange_MultiplePlayers(t *testing.T) {
-	mock := testutils.NewMockIO()
-	players := []*game.Player{
-		game.NewPlayer(rune(game.PlayerX), mock, nil),
-		game.NewPlayer(rune(game.PlayerO), mock, nil),
-	}
+	mock, players := createMapPlayers()
 
 	turn := game.NewTurn(players, mock)
 
@@ -87,4 +71,13 @@ func TestTurnChange_MultiplePlayers(t *testing.T) {
 			t.Errorf("After %d changes, expected %c, got %c", i, tc.expectedRune, symbol)
 		}
 	}
+}
+
+func createMapPlayers() (*testutils.MockIO, map[game.SymbolPlayerCurrent]game.Player) {
+	mock := testutils.NewMockIO()
+	players := map[game.SymbolPlayerCurrent]game.Player{
+		game.PlayerX: *game.NewPlayer(game.PlayerX, mock, nil),
+		game.PlayerO: *game.NewPlayer(game.PlayerO, mock, nil),
+	}
+	return mock, players
 }

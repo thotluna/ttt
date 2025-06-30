@@ -11,52 +11,52 @@ func TestPlayer_CheckWin(t *testing.T) {
 	tests := []struct {
 		name     string
 		input    string
-		board    [3][3]rune
-		symbol   rune
+		board    [3][3]game.SymbolPlayerCurrent
+		symbol   game.SymbolPlayerCurrent
 		expected bool
 	}{
 		{
 			name:  "Horizontal win",
 			input: "2.1",
-			board: [3][3]rune{
-				{'X', 'O', 'O'},
-				{'O', 'O', 'X'},
-				{'X', '-', 'X'},
+			board: [3][3]game.SymbolPlayerCurrent{
+				{game.PlayerX, game.PlayerO, game.PlayerO},
+				{game.PlayerO, game.PlayerO, game.PlayerX},
+				{game.PlayerX, game.EmptyCell, game.PlayerX},
 			},
-			symbol:   'X',
+			symbol:   game.PlayerX,
 			expected: true,
 		},
 		{
 			name:  "Vertical win",
 			input: "1.0",
-			board: [3][3]rune{
-				{'X', 'O', 'X'},
-				{'-', 'O', 'O'},
-				{'X', 'X', 'O'},
+			board: [3][3]game.SymbolPlayerCurrent{
+				{game.PlayerX, game.PlayerO, game.PlayerX},
+				{game.EmptyCell, game.PlayerO, game.PlayerO},
+				{game.PlayerX, game.PlayerX, game.PlayerO},
 			},
-			symbol:   'X',
+			symbol:   game.PlayerX,
 			expected: true,
 		},
 		{
 			name:  "Diagonal win",
 			input: "2.2",
-			board: [3][3]rune{
-				{'X', 'O', 'O'},
-				{'-', 'X', '-'},
-				{'-', '-', '-'},
+			board: [3][3]game.SymbolPlayerCurrent{
+				{game.PlayerX, game.PlayerO, game.PlayerO},
+				{game.EmptyCell, game.PlayerX, game.EmptyCell},
+				{game.EmptyCell, game.EmptyCell, game.EmptyCell},
 			},
-			symbol:   'X',
+			symbol:   game.PlayerX,
 			expected: true,
 		},
 		{
 			name:  "Inverter diagonal win",
 			input: "2.0",
-			board: [3][3]rune{
-				{'X', 'O', 'X'},
-				{'O', 'X', 'O'},
-				{'-', 'O', 'O'},
+			board: [3][3]game.SymbolPlayerCurrent{
+				{game.PlayerX, game.PlayerO, game.PlayerX},
+				{game.PlayerO, game.PlayerX, game.PlayerO},
+				{game.EmptyCell, game.PlayerO, game.PlayerO},
 			},
-			symbol:   'X',
+			symbol:   game.PlayerX,
 			expected: true,
 		},
 	}

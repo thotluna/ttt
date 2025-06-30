@@ -40,19 +40,19 @@ func TestFullBoard(t *testing.T) {
 
 	tests := []struct {
 		name   string
-		symbol []rune
+		symbol []game.SymbolPlayerCurrent
 		coor   []game.Coordinate
 		full   bool
 	}{
 		{
 			name:   "Empty board",
-			symbol: []rune{},
+			symbol: []game.SymbolPlayerCurrent{},
 			coor:   []game.Coordinate{},
 			full:   false,
 		},
 		{
 			name:   "Partially filled board",
-			symbol: []rune{'X', 'O'},
+			symbol: []game.SymbolPlayerCurrent{game.PlayerX, game.PlayerO},
 			coor: []game.Coordinate{
 				testutils.MustNewCoordinate(t, 0, 0),
 				testutils.MustNewCoordinate(t, 1, 1),
@@ -61,7 +61,7 @@ func TestFullBoard(t *testing.T) {
 		},
 		{
 			name:   "Full board",
-			symbol: []rune{'X', 'O', 'X', 'O', 'X', 'O', 'X', 'O', 'X'},
+			symbol: []game.SymbolPlayerCurrent{game.PlayerX, game.PlayerO, game.PlayerX, game.PlayerO, game.PlayerX, game.PlayerO, game.PlayerX, game.PlayerO, game.PlayerX},
 			coor: []game.Coordinate{
 				testutils.MustNewCoordinate(t, 0, 0),
 				testutils.MustNewCoordinate(t, 0, 1),
@@ -94,7 +94,7 @@ func TestFullBoard(t *testing.T) {
 func TestPlaceToken_Validation(t *testing.T) {
 	tests := []struct {
 		name        string
-		symbol      rune
+		symbol      game.SymbolPlayerCurrent
 		coor        game.Coordinate
 		setup       func(*game.Board) error
 		expectError bool
@@ -102,16 +102,16 @@ func TestPlaceToken_Validation(t *testing.T) {
 	}{
 		{
 			name:        "valid position",
-			symbol:      'X',
+			symbol:      game.PlayerX,
 			coor:        testutils.MustNewCoordinate(t, 1, 1),
 			setup:       func(b *game.Board) error { return nil },
 			expectError: false,
 		},
 		{
 			name:        "position already taken",
-			symbol:      'X',
+			symbol:      game.PlayerX,
 			coor:        testutils.MustNewCoordinate(t, 0, 0),
-			setup:       func(b *game.Board) error { return b.PlaceToken('O', testutils.MustNewCoordinate(t, 0, 0)) },
+			setup:       func(b *game.Board) error { return b.PlaceToken(game.PlayerO, testutils.MustNewCoordinate(t, 0, 0)) },
 			expectError: true,
 			errMsg:      "position (0,0) is already taken",
 		},
