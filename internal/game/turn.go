@@ -2,12 +2,6 @@ package game
 
 import "github.com/thotluna/ttt/internal/view"
 
-const (
-	PlayerXIndex    = 0
-	PlayerOIndex    = 1
-	NumberOfPlayers = 2
-)
-
 type Turn struct {
 	symbolCurrent Symbol
 	players       map[Symbol]Player

@@ -55,10 +55,10 @@ func TestTurnChange_MultiplePlayers(t *testing.T) {
 	testCases := []struct {
 		expectedSymbol game.Symbol
 	}{
-		{game.PlayerX}, // Initial
-		{game.PlayerO}, // After 1 change
-		{game.PlayerX}, // After 2 changes
-		{game.PlayerO}, // After 3 changes
+		{game.PlayerX},
+		{game.PlayerO},
+		{game.PlayerX},
+		{game.PlayerO},
 	}
 
 	for i, tc := range testCases {

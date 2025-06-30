@@ -8,7 +8,6 @@ import (
 
 const (
 	MinNumberTokensWin = 3
-	partOfCoordinate   = 2
 )
 
 type Player struct {

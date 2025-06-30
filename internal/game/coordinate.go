@@ -52,12 +52,10 @@ func (c Coordinate) IsHorizontalTo(other Coordinate) bool {
 }
 
 func (c Coordinate) IsDiagonalTo(other Coordinate) bool {
-	// Están en la misma diagonal principal
 	return c.row == c.col && other.row == other.col && c.row != other.row
 }
 
 func (c Coordinate) IsInverterTo(other Coordinate) bool {
-	// Están en la misma diagonal inversa (de esquina a esquina)
 	return (c.row+c.col == other.row+other.col) && (c.row != other.row) && (c.col != other.col)
 }
 
