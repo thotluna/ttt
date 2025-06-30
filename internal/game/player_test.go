@@ -11,28 +11,33 @@ func TestPlayer_CheckWin(t *testing.T) {
 	tests := []struct {
 		name     string
 		input    string
-		board    [3][3]game.Symbol
+		board    func(board *game.Board) *game.Board
 		symbol   game.Symbol
 		expected bool
 	}{
 		{
 			name:  "Horizontal win",
 			input: "2.1",
-			board: [3][3]game.Symbol{
-				{game.PlayerX, game.PlayerO, game.PlayerO},
-				{game.PlayerO, game.PlayerO, game.PlayerX},
-				{game.PlayerX, game.EmptyCell, game.PlayerX},
+			board: func(board *game.Board) *game.Board {
+				return newBoardBuilder(board).
+					WithRow(0, game.PlayerX, game.PlayerO, game.PlayerO).
+					WithRow(1, game.PlayerO, game.PlayerO, game.PlayerX).
+					WithRow(2, game.PlayerX, game.EmptyCell, game.PlayerX).
+					Build()
 			},
+
 			symbol:   game.PlayerX,
 			expected: true,
 		},
 		{
 			name:  "Vertical win",
 			input: "1.0",
-			board: [3][3]game.Symbol{
-				{game.PlayerX, game.PlayerO, game.PlayerX},
-				{game.EmptyCell, game.PlayerO, game.PlayerO},
-				{game.PlayerX, game.PlayerX, game.PlayerO},
+			board: func(board *game.Board) *game.Board {
+				return newBoardBuilder(board).
+					WithRow(0, game.PlayerX, game.PlayerO, game.PlayerX).
+					WithRow(1, game.EmptyCell, game.PlayerO, game.PlayerO).
+					WithRow(2, game.PlayerX, game.PlayerX, game.PlayerO).
+					Build()
 			},
 			symbol:   game.PlayerX,
 			expected: true,
@@ -40,10 +45,12 @@ func TestPlayer_CheckWin(t *testing.T) {
 		{
 			name:  "Diagonal win",
 			input: "2.2",
-			board: [3][3]game.Symbol{
-				{game.PlayerX, game.PlayerO, game.PlayerO},
-				{game.EmptyCell, game.PlayerX, game.EmptyCell},
-				{game.EmptyCell, game.EmptyCell, game.EmptyCell},
+			board: func(board *game.Board) *game.Board {
+				return newBoardBuilder(board).
+					WithRow(0, game.PlayerX, game.PlayerO, game.PlayerO).
+					WithRow(1, game.EmptyCell, game.PlayerX, game.EmptyCell).
+					WithRow(2, game.EmptyCell, game.EmptyCell, game.EmptyCell).
+					Build()
 			},
 			symbol:   game.PlayerX,
 			expected: true,
@@ -51,10 +58,12 @@ func TestPlayer_CheckWin(t *testing.T) {
 		{
 			name:  "Inverter diagonal win",
 			input: "2.0",
-			board: [3][3]game.Symbol{
-				{game.PlayerX, game.PlayerO, game.PlayerX},
-				{game.PlayerO, game.PlayerX, game.PlayerO},
-				{game.EmptyCell, game.PlayerO, game.PlayerO},
+			board: func(board *game.Board) *game.Board {
+				return newBoardBuilder(board).
+					WithRow(0, game.PlayerX, game.PlayerO, game.PlayerX).
+					WithRow(1, game.PlayerO, game.PlayerX, game.PlayerO).
+					WithRow(2, game.EmptyCell, game.PlayerO, game.PlayerO).
+					Build()
 			},
 			symbol:   game.PlayerX,
 			expected: true,
@@ -65,7 +74,8 @@ func TestPlayer_CheckWin(t *testing.T) {
 		t.Run(tt.name, func(t *testing.T) {
 			mockIO := testutils.NewMockIO(tt.input)
 			board := game.NewBoard(mockIO)
-			board.SetBoard(tt.board)
+			board = tt.board(board)
+			// board.SetBoard(tt.board(board))
 
 			player := game.NewPlayer(tt.symbol, mockIO, board)
 			isWin := player.Play()

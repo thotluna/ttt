@@ -11,11 +11,12 @@ import (
 func TestNewBoard(t *testing.T) {
 	mockIO := &testutils.MockIO{}
 	board := game.NewBoard(mockIO)
-	boardData := board.GetBoard()
+
 	for i := 0; i < game.BoardSize; i++ {
 		for j := 0; j < game.BoardSize; j++ {
-			if boardData[i][j] != '-' {
-				t.Errorf("Expected '-' at position [%d][%d], got %c", i, j, boardData[i][j])
+			coor := testutils.MustNewCoordinate(t, i, j)
+			if !board.IsOccupiedCellBy(coor, game.EmptyCell) {
+				t.Errorf("Expected empty cell at position [%d][%d]", i, j)
 			}
 		}
 	}
@@ -24,15 +25,33 @@ func TestNewBoard(t *testing.T) {
 func TestPlaceToken(t *testing.T) {
 	mockIO := &testutils.MockIO{}
 	board := game.NewBoard(mockIO)
-	coor, _ := game.NewCoordinate(1, 1)
-	board.PlaceToken('X', coor)
-	boardData := board.GetBoard()
-	if boardData[1][1] != 'X' {
-		t.Error("Token not placed correctly at [1][1]")
+	coor := testutils.MustNewCoordinate(t, 1, 1)
+
+	if board.IsOccupiedCellBy(coor, game.PlayerX) {
+		t.Error("Cell should be empty initially")
 	}
 
-	if boardData[0][0] != '-' || boardData[2][2] != '-' {
-		t.Error("Other cells should remain empty")
+	// Colocar ficha y verificar
+	err := board.PlaceToken(game.PlayerX, coor)
+	if err != nil {
+		t.Fatalf("Error placing token: %v", err)
+	}
+
+	// Verificar que la celda tiene la X
+	if !board.IsOccupiedCellBy(coor, game.PlayerX) {
+		t.Error("Token 'X' not placed correctly at [1][1]")
+	}
+
+	// Verificar que otras celdas sigan vacías
+	otherCoords := []game.Coordinate{
+		testutils.MustNewCoordinate(t, 0, 0),
+		testutils.MustNewCoordinate(t, 2, 2),
+	}
+
+	for _, c := range otherCoords {
+		if board.IsOccupiedCellBy(c, game.PlayerX) || board.IsOccupiedCellBy(c, game.PlayerO) {
+			t.Errorf("Cell [%d][%d] should be empty", c.Row(), c.Col())
+		}
 	}
 }
 
@@ -136,20 +155,6 @@ func TestPlaceToken_Validation(t *testing.T) {
 				t.Errorf("Unexpected error: %v", err)
 			}
 		})
-	}
-}
-
-func TestGetBoardReturnsCopy(t *testing.T) {
-	mockIO := &testutils.MockIO{}
-	board := game.NewBoard(mockIO)
-
-	boardCopy := board.GetBoard()
-	boardCopy[0][0] = 'X'
-
-	// Obtener una nueva copia para verificar
-	boardData := board.GetBoard()
-	if boardData[0][0] != '-' {
-		t.Error("GetBoard() should return a copy of the board, not a reference")
 	}
 }
 

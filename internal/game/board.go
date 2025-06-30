@@ -26,14 +26,6 @@ func NewBoard(io view.IO) *Board {
 	}
 }
 
-func (b *Board) GetBoard() [BoardSize][BoardSize]Symbol {
-	return b.board
-}
-
-func (b *Board) SetBoard(board [BoardSize][BoardSize]Symbol) {
-	b.board = board
-}
-
 func (b *Board) PlaceToken(symbol Symbol, coor Coordinate) error {
 
 	if !b.isEmptyCell(coor) {
