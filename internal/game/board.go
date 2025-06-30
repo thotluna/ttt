@@ -30,7 +30,7 @@ func NewBoard(io view.IO) *Board {
 
 func (b *Board) PlaceToken(symbol Symbol, origin, destination *Coordinate) error {
 
-	if origin != nil && !b.isEmptyCell(*origin) {
+	if origin != nil {
 		if b.isEmptyCell(*origin) {
 			return NewGameError(ErrEmptyCell,
 				FormatPositionTaken(origin.row, origin.col))
@@ -40,6 +40,13 @@ func (b *Board) PlaceToken(symbol Symbol, origin, destination *Coordinate) error
 			return NewGameError(ErrPositionOccupied,
 				FormatPositionTaken(origin.row, origin.col))
 		}
+
+		if origin.Equals(*destination) {
+			return NewGameError(ErrPositionOccupied,
+				FormatPositionTaken(origin.row, origin.col))
+		}
+
+		b.board[origin.row][origin.col] = EmptyCell
 	}
 
 	if !b.isEmptyCell(*destination) {
