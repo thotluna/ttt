@@ -15,7 +15,7 @@ func TestNewBoard(t *testing.T) {
 	for i := 0; i < game.BoardSize; i++ {
 		for j := 0; j < game.BoardSize; j++ {
 			coor := testutils.MustNewCoordinate(t, i, j)
-			if !board.IsFull() && !board.IsCellOccupiedBy(coor, game.EmptyCell) {
+			if !board.IsFull() && !board.IsCellOccupiedBy(*coor, game.EmptyCell) {
 				t.Errorf("Expected empty cell at position [%d][%d]", i, j)
 			}
 		}
@@ -27,29 +27,29 @@ func TestPlaceToken(t *testing.T) {
 	board := game.NewBoard(mockIO)
 	coor := testutils.MustNewCoordinate(t, 1, 1)
 
-	if board.IsCellOccupiedBy(coor, game.PlayerX) {
+	if board.IsCellOccupiedBy(*coor, game.PlayerX) {
 		t.Error("Cell should be empty initially")
 	}
 
 	// Colocar ficha y verificar
-	err := board.PlaceToken(game.PlayerX, coor)
+	err := board.PlaceToken(game.PlayerX, nil, coor)
 	if err != nil {
 		t.Fatalf("Error placing token: %v", err)
 	}
 
 	// Verificar que la celda tiene la X
-	if !board.IsCellOccupiedBy(coor, game.PlayerX) {
+	if !board.IsCellOccupiedBy(*coor, game.PlayerX) {
 		t.Error("Token 'X' not placed correctly at [1][1]")
 	}
 
 	// Verificar que otras celdas sigan vacías
-	otherCoords := []game.Coordinate{
+	otherCoords := []*game.Coordinate{
 		testutils.MustNewCoordinate(t, 0, 0),
 		testutils.MustNewCoordinate(t, 2, 2),
 	}
 
 	for _, c := range otherCoords {
-		if board.IsCellOccupiedBy(c, game.PlayerX) || board.IsCellOccupiedBy(c, game.PlayerO) {
+		if board.IsCellOccupiedBy(*c, game.PlayerX) || board.IsCellOccupiedBy(*c, game.PlayerO) {
 			t.Errorf("Cell [%d][%d] should be empty", c.Row(), c.Col())
 		}
 	}
@@ -60,19 +60,19 @@ func TestFullBoard(t *testing.T) {
 	tests := []struct {
 		name   string
 		symbol []game.Symbol
-		coor   []game.Coordinate
+		coor   []*game.Coordinate
 		full   bool
 	}{
 		{
 			name:   "Empty board",
 			symbol: []game.Symbol{},
-			coor:   []game.Coordinate{},
+			coor:   []*game.Coordinate{},
 			full:   false,
 		},
 		{
 			name:   "Partially filled board",
 			symbol: []game.Symbol{game.PlayerX, game.PlayerO},
-			coor: []game.Coordinate{
+			coor: []*game.Coordinate{
 				testutils.MustNewCoordinate(t, 0, 0),
 				testutils.MustNewCoordinate(t, 1, 1),
 			},
@@ -81,7 +81,7 @@ func TestFullBoard(t *testing.T) {
 		{
 			name:   "Full board",
 			symbol: []game.Symbol{game.PlayerX, game.PlayerO, game.PlayerX, game.PlayerO, game.PlayerX, game.PlayerO, game.PlayerX, game.PlayerO, game.PlayerX},
-			coor: []game.Coordinate{
+			coor: []*game.Coordinate{
 				testutils.MustNewCoordinate(t, 0, 0),
 				testutils.MustNewCoordinate(t, 0, 1),
 				testutils.MustNewCoordinate(t, 0, 2),
@@ -101,7 +101,7 @@ func TestFullBoard(t *testing.T) {
 			mockIO := &testutils.MockIO{}
 			board := game.NewBoard(mockIO)
 			for index, coor := range tc.coor {
-				board.PlaceToken(tc.symbol[index], coor)
+				board.PlaceToken(tc.symbol[index], nil, coor)
 			}
 			if got := board.IsFull(); got != tc.full {
 				t.Errorf("Expected FullBoard() = %v, got %v", tc.full, got)
@@ -114,7 +114,7 @@ func TestPlaceToken_Validation(t *testing.T) {
 	tests := []struct {
 		name        string
 		symbol      game.Symbol
-		coor        game.Coordinate
+		coor        *game.Coordinate
 		setup       func(*game.Board) error
 		expectError bool
 		errMsg      string
@@ -127,10 +127,12 @@ func TestPlaceToken_Validation(t *testing.T) {
 			expectError: false,
 		},
 		{
-			name:        "position already taken",
-			symbol:      game.PlayerX,
-			coor:        testutils.MustNewCoordinate(t, 0, 0),
-			setup:       func(b *game.Board) error { return b.PlaceToken(game.PlayerO, testutils.MustNewCoordinate(t, 0, 0)) },
+			name:   "position already taken",
+			symbol: game.PlayerX,
+			coor:   testutils.MustNewCoordinate(t, 0, 0),
+			setup: func(b *game.Board) error {
+				return b.PlaceToken(game.PlayerO, nil, testutils.MustNewCoordinate(t, 0, 0))
+			},
 			expectError: true,
 			errMsg:      "position (0,0) is already taken",
 		},
@@ -145,7 +147,7 @@ func TestPlaceToken_Validation(t *testing.T) {
 				t.Fatalf("Setup error: %v", err)
 			}
 
-			err := board.PlaceToken(tc.symbol, tc.coor)
+			err := board.PlaceToken(tc.symbol, nil, tc.coor)
 
 			if tc.expectError {
 				if !strings.Contains(err.Error(), tc.errMsg) {
@@ -163,8 +165,8 @@ func TestPrint(t *testing.T) {
 	board := game.NewBoard(mockIO)
 
 	// Colocar algunas fichas para probar la salida
-	board.PlaceToken('X', testutils.MustNewCoordinate(t, 0, 0))
-	board.PlaceToken('O', testutils.MustNewCoordinate(t, 1, 1))
+	board.PlaceToken('X', nil, testutils.MustNewCoordinate(t, 0, 0))
+	board.PlaceToken('O', nil, testutils.MustNewCoordinate(t, 1, 1))
 
 	// Llamar al método Print
 	board.Print()

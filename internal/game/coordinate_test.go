@@ -100,8 +100,8 @@ func TestCoordinate_Equals(t *testing.T) {
 
 	tests := []struct {
 		name string
-		c1   game.Coordinate
-		c2   game.Coordinate
+		c1   *game.Coordinate
+		c2   *game.Coordinate
 		want bool
 	}{
 		{"equal coordinates", coord1, testutils.MustNewCoordinate(t, 1, 1), true},
@@ -112,7 +112,7 @@ func TestCoordinate_Equals(t *testing.T) {
 
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			if got := tt.c1.Equals(tt.c2); got != tt.want {
+			if got := tt.c1.Equals(*tt.c2); got != tt.want {
 				t.Errorf("Equals() = %v, want %v", got, tt.want)
 			}
 		})
@@ -124,8 +124,8 @@ func TestCoordinate_Directions(t *testing.T) {
 
 	tests := []struct {
 		name      string
-		c1        game.Coordinate
-		c2        game.Coordinate
+		c1        *game.Coordinate
+		c2        *game.Coordinate
 		isVert    bool
 		isHoriz   bool
 		isDiag    bool
@@ -185,23 +185,23 @@ func TestCoordinate_Directions(t *testing.T) {
 
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			if got := tt.c1.IsVerticalTo(tt.c2); got != tt.isVert {
+			if got := tt.c1.IsVerticalTo(*tt.c2); got != tt.isVert {
 				t.Errorf("IsVerticalTo() = %v, want %v", got, tt.isVert)
 			}
 
-			if got := tt.c1.IsHorizontalTo(tt.c2); got != tt.isHoriz {
+			if got := tt.c1.IsHorizontalTo(*tt.c2); got != tt.isHoriz {
 				t.Errorf("IsHorizontalTo() = %v, want %v", got, tt.isHoriz)
 			}
 
-			if got := tt.c1.IsDiagonalTo(tt.c2); got != tt.isDiag {
+			if got := tt.c1.IsDiagonalTo(*tt.c2); got != tt.isDiag {
 				t.Errorf("IsDiagonalTo() = %v, want %v", got, tt.isDiag)
 			}
 
-			if got := tt.c1.IsInverterTo(tt.c2); got != tt.isInvert {
+			if got := tt.c1.IsInverterTo(*tt.c2); got != tt.isInvert {
 				t.Errorf("IsInverterTo() = %v, want %v", got, tt.isInvert)
 			}
 
-			if got := tt.c1.Direction(tt.c2); got != tt.direction {
+			if got := tt.c1.Direction(*tt.c2); got != tt.direction {
 				t.Errorf("Direction() = %v, want %v", got, tt.direction)
 			}
 		})

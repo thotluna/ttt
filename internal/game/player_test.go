@@ -7,6 +7,36 @@ import (
 	"github.com/thotluna/ttt/testutils"
 )
 
+func TestPlayer_MoveCount(t *testing.T) {
+	mockIO := testutils.NewMockIO(
+		"0.0",
+		"0.1",
+		"0.2",
+	)
+
+	board := game.NewBoard(mockIO)
+	player := game.NewPlayer(game.PlayerX, mockIO, board)
+
+	if player.MoveCount() != 0 {
+		t.Error("El contador debe empezar en 0")
+	}
+
+	player.Play()
+	if player.MoveCount() != 1 {
+		t.Error("El contador debe ser 1 después del primer movimiento")
+	}
+
+	player.Play()
+	if player.MoveCount() != 2 {
+		t.Error("El contador debe ser 2 después del segundo movimiento")
+	}
+
+	player.Play()
+	if player.MoveCount() != 3 {
+		t.Error("El contador debe ser 3 después del tercer movimiento")
+	}
+}
+
 func TestPlayer_CheckWin(t *testing.T) {
 	tests := []struct {
 		name     string
@@ -20,8 +50,8 @@ func TestPlayer_CheckWin(t *testing.T) {
 			input: "2.1",
 			board: func(board *game.Board) *game.Board {
 				return newBoardBuilder(board).
-					WithRow(0, game.PlayerX, game.PlayerO, game.PlayerO).
-					WithRow(1, game.PlayerO, game.PlayerO, game.PlayerX).
+					WithRow(0, game.EmptyCell, game.EmptyCell, game.EmptyCell).
+					WithRow(1, game.EmptyCell, game.EmptyCell, game.EmptyCell).
 					WithRow(2, game.PlayerX, game.EmptyCell, game.PlayerX).
 					Build()
 			},
@@ -34,9 +64,9 @@ func TestPlayer_CheckWin(t *testing.T) {
 			input: "1.0",
 			board: func(board *game.Board) *game.Board {
 				return newBoardBuilder(board).
-					WithRow(0, game.PlayerX, game.PlayerO, game.PlayerX).
-					WithRow(1, game.EmptyCell, game.PlayerO, game.PlayerO).
-					WithRow(2, game.PlayerX, game.PlayerX, game.PlayerO).
+					WithRow(0, game.PlayerX, game.EmptyCell, game.EmptyCell).
+					WithRow(1, game.EmptyCell, game.EmptyCell, game.EmptyCell).
+					WithRow(2, game.PlayerX, game.EmptyCell, game.EmptyCell).
 					Build()
 			},
 			symbol:   game.PlayerX,
@@ -47,7 +77,7 @@ func TestPlayer_CheckWin(t *testing.T) {
 			input: "2.2",
 			board: func(board *game.Board) *game.Board {
 				return newBoardBuilder(board).
-					WithRow(0, game.PlayerX, game.PlayerO, game.PlayerO).
+					WithRow(0, game.PlayerX, game.EmptyCell, game.EmptyCell).
 					WithRow(1, game.EmptyCell, game.PlayerX, game.EmptyCell).
 					WithRow(2, game.EmptyCell, game.EmptyCell, game.EmptyCell).
 					Build()
@@ -60,9 +90,9 @@ func TestPlayer_CheckWin(t *testing.T) {
 			input: "2.0",
 			board: func(board *game.Board) *game.Board {
 				return newBoardBuilder(board).
-					WithRow(0, game.PlayerX, game.PlayerO, game.PlayerX).
-					WithRow(1, game.PlayerO, game.PlayerX, game.PlayerO).
-					WithRow(2, game.EmptyCell, game.PlayerO, game.PlayerO).
+					WithRow(0, game.EmptyCell, game.EmptyCell, game.PlayerX).
+					WithRow(1, game.EmptyCell, game.PlayerX, game.EmptyCell).
+					WithRow(2, game.EmptyCell, game.EmptyCell, game.EmptyCell).
 					Build()
 			},
 			symbol:   game.PlayerX,
@@ -75,7 +105,6 @@ func TestPlayer_CheckWin(t *testing.T) {
 			mockIO := testutils.NewMockIO(tt.input)
 			board := game.NewBoard(mockIO)
 			board = tt.board(board)
-			// board.SetBoard(tt.board(board))
 
 			player := game.NewPlayer(tt.symbol, mockIO, board)
 			isWin := player.Play()

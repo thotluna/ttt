@@ -5,7 +5,7 @@ import (
 )
 
 type boardBuilder struct {
-	board  *game.Board
+	board *game.Board
 }
 
 // newBoardBuilder crea un nuevo constructor de tablero para tests
@@ -18,7 +18,7 @@ func newBoardBuilder(board *game.Board) *boardBuilder {
 // WithSymbol coloca un símbolo en la posición especificada
 func (b *boardBuilder) WithSymbol(symbol game.Symbol, row, col int) *boardBuilder {
 	coor, _ := game.NewCoordinate(row, col)
-	_ = b.board.PlaceToken(symbol, coor) // Ignoramos el error a propósito en tests
+	_ = b.board.PlaceToken(symbol, nil, &coor) // Ignoramos el error a propósito en tests
 	return b
 }
 
