@@ -1,9 +1,9 @@
 package game
 
-type SymbolPlayerCurrent rune
+type Symbol rune
 
 const (
-	PlayerX   SymbolPlayerCurrent = 'X'
-	PlayerO   SymbolPlayerCurrent = 'O'
-	EmptyCell SymbolPlayerCurrent = '-'
+	PlayerX   Symbol = 'X'
+	PlayerO   Symbol = 'O'
+	EmptyCell Symbol = '-'
 )

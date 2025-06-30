@@ -11,14 +11,14 @@ func TestPlayer_CheckWin(t *testing.T) {
 	tests := []struct {
 		name     string
 		input    string
-		board    [3][3]game.SymbolPlayerCurrent
-		symbol   game.SymbolPlayerCurrent
+		board    [3][3]game.Symbol
+		symbol   game.Symbol
 		expected bool
 	}{
 		{
 			name:  "Horizontal win",
 			input: "2.1",
-			board: [3][3]game.SymbolPlayerCurrent{
+			board: [3][3]game.Symbol{
 				{game.PlayerX, game.PlayerO, game.PlayerO},
 				{game.PlayerO, game.PlayerO, game.PlayerX},
 				{game.PlayerX, game.EmptyCell, game.PlayerX},
@@ -29,7 +29,7 @@ func TestPlayer_CheckWin(t *testing.T) {
 		{
 			name:  "Vertical win",
 			input: "1.0",
-			board: [3][3]game.SymbolPlayerCurrent{
+			board: [3][3]game.Symbol{
 				{game.PlayerX, game.PlayerO, game.PlayerX},
 				{game.EmptyCell, game.PlayerO, game.PlayerO},
 				{game.PlayerX, game.PlayerX, game.PlayerO},
@@ -40,7 +40,7 @@ func TestPlayer_CheckWin(t *testing.T) {
 		{
 			name:  "Diagonal win",
 			input: "2.2",
-			board: [3][3]game.SymbolPlayerCurrent{
+			board: [3][3]game.Symbol{
 				{game.PlayerX, game.PlayerO, game.PlayerO},
 				{game.EmptyCell, game.PlayerX, game.EmptyCell},
 				{game.EmptyCell, game.EmptyCell, game.EmptyCell},
@@ -51,7 +51,7 @@ func TestPlayer_CheckWin(t *testing.T) {
 		{
 			name:  "Inverter diagonal win",
 			input: "2.0",
-			board: [3][3]game.SymbolPlayerCurrent{
+			board: [3][3]game.Symbol{
 				{game.PlayerX, game.PlayerO, game.PlayerX},
 				{game.PlayerO, game.PlayerX, game.PlayerO},
 				{game.EmptyCell, game.PlayerO, game.PlayerO},

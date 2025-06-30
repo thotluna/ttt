@@ -12,7 +12,7 @@ type Game struct {
 
 func NewGame(io view.IO) Game {
 	board := NewBoard(io)
-	players := map[SymbolPlayerCurrent]Player{
+	players := map[Symbol]Player{
 		PlayerX: *NewPlayer(PlayerX, io, board),
 		PlayerO: *NewPlayer(PlayerO, io, board),
 	}

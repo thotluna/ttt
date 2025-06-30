@@ -12,12 +12,12 @@ const (
 )
 
 type Player struct {
-	symbol SymbolPlayerCurrent
+	symbol Symbol
 	board  *Board
 	input  *PlayerInput
 }
 
-func NewPlayer(symbol SymbolPlayerCurrent, io view.IO, board *Board) *Player {
+func NewPlayer(symbol Symbol, io view.IO, board *Board) *Player {
 	return &Player{
 		symbol: symbol,
 		board:  board,

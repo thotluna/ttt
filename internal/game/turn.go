@@ -9,57 +9,44 @@ const (
 )
 
 type Turn struct {
-	symbol  SymbolPlayerCurrent
-	players map[SymbolPlayerCurrent]Player
-	io      view.IO
+	symbolCurrent Symbol
+	players       map[Symbol]Player
+	io            view.IO
 }
 
-func NewTurn(players map[SymbolPlayerCurrent]Player, io view.IO) Turn {
+func NewTurn(players map[Symbol]Player, io view.IO) Turn {
 	return Turn{
-		symbol:  PlayerX,
-		players: players,
-		io:      io,
+		symbolCurrent: PlayerX,
+		players:       players,
+		io:            io,
 	}
 }
 
 func (t *Turn) TurnChange() {
-	switch t.symbol {
+	switch t.symbolCurrent {
 	case PlayerX:
-		t.symbol = PlayerO
+		t.symbolCurrent = PlayerO
 	case PlayerO:
-		t.symbol = PlayerX
-	}
-	switch t.symbol {
-	case PlayerX:
-		t.symbol = PlayerO
-	case PlayerO:
-		t.symbol = PlayerX
+		t.symbolCurrent = PlayerX
 	}
 }
 
-func (t *Turn) GetTurn() (int, rune) {
-	switch t.symbol {
+func (t *Turn) GetTurn() Symbol {
+	switch t.symbolCurrent {
 	case PlayerX:
-		return PlayerXIndex, rune(PlayerX)
+		return PlayerX
 	case PlayerO:
-		return PlayerOIndex, rune(PlayerO)
-	switch t.symbol {
-	case PlayerX:
-		return PlayerXIndex, rune(PlayerX)
-	case PlayerO:
-		return PlayerOIndex, rune(PlayerO)
+		return PlayerO
 	default:
-		return PlayerXIndex, rune(PlayerX)
-		return PlayerXIndex, rune(PlayerX)
+		return PlayerX
 	}
 }
 
 func (t *Turn) GetCurrentPlayer() *Player {
-	player := t.players[t.symbol]
+	player := t.players[t.symbolCurrent]
 	return &player
 }
 
 func (t *Turn) PrintTurn() {
-	_, symbol := t.GetTurn()
-	t.io.PrintMessage(FormatPlayerTurn(symbol))
+	t.io.PrintMessage(FormatPlayerTurn(rune(t.GetTurn())))
 }

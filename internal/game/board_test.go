@@ -40,19 +40,19 @@ func TestFullBoard(t *testing.T) {
 
 	tests := []struct {
 		name   string
-		symbol []game.SymbolPlayerCurrent
+		symbol []game.Symbol
 		coor   []game.Coordinate
 		full   bool
 	}{
 		{
 			name:   "Empty board",
-			symbol: []game.SymbolPlayerCurrent{},
+			symbol: []game.Symbol{},
 			coor:   []game.Coordinate{},
 			full:   false,
 		},
 		{
 			name:   "Partially filled board",
-			symbol: []game.SymbolPlayerCurrent{game.PlayerX, game.PlayerO},
+			symbol: []game.Symbol{game.PlayerX, game.PlayerO},
 			coor: []game.Coordinate{
 				testutils.MustNewCoordinate(t, 0, 0),
 				testutils.MustNewCoordinate(t, 1, 1),
@@ -61,7 +61,7 @@ func TestFullBoard(t *testing.T) {
 		},
 		{
 			name:   "Full board",
-			symbol: []game.SymbolPlayerCurrent{game.PlayerX, game.PlayerO, game.PlayerX, game.PlayerO, game.PlayerX, game.PlayerO, game.PlayerX, game.PlayerO, game.PlayerX},
+			symbol: []game.Symbol{game.PlayerX, game.PlayerO, game.PlayerX, game.PlayerO, game.PlayerX, game.PlayerO, game.PlayerX, game.PlayerO, game.PlayerX},
 			coor: []game.Coordinate{
 				testutils.MustNewCoordinate(t, 0, 0),
 				testutils.MustNewCoordinate(t, 0, 1),
@@ -94,7 +94,7 @@ func TestFullBoard(t *testing.T) {
 func TestPlaceToken_Validation(t *testing.T) {
 	tests := []struct {
 		name        string
-		symbol      game.SymbolPlayerCurrent
+		symbol      game.Symbol
 		coor        game.Coordinate
 		setup       func(*game.Board) error
 		expectError bool

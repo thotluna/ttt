@@ -11,14 +11,14 @@ const (
 )
 
 type Board struct {
-	board [BoardSize][BoardSize]SymbolPlayerCurrent
+	board [BoardSize][BoardSize]Symbol
 	io    view.IO
 }
 
 func NewBoard(io view.IO) *Board {
 	return &Board{
 		io: io,
-		board: [BoardSize][BoardSize]SymbolPlayerCurrent{
+		board: [BoardSize][BoardSize]Symbol{
 			{EmptyCell, EmptyCell, EmptyCell},
 			{EmptyCell, EmptyCell, EmptyCell},
 			{EmptyCell, EmptyCell, EmptyCell},
@@ -26,15 +26,15 @@ func NewBoard(io view.IO) *Board {
 	}
 }
 
-func (b *Board) GetBoard() [BoardSize][BoardSize]SymbolPlayerCurrent {
+func (b *Board) GetBoard() [BoardSize][BoardSize]Symbol {
 	return b.board
 }
 
-func (b *Board) SetBoard(board [BoardSize][BoardSize]SymbolPlayerCurrent) {
+func (b *Board) SetBoard(board [BoardSize][BoardSize]Symbol) {
 	b.board = board
 }
 
-func (b *Board) PlaceToken(symbol SymbolPlayerCurrent, coor Coordinate) error {
+func (b *Board) PlaceToken(symbol Symbol, coor Coordinate) error {
 
 	if !b.isEmptyCell(coor) {
 		return NewGameError(ErrPositionOccupied,
@@ -45,7 +45,7 @@ func (b *Board) PlaceToken(symbol SymbolPlayerCurrent, coor Coordinate) error {
 	return nil
 }
 
-func (b *Board) GetTokenBy(symbol SymbolPlayerCurrent) []Coordinate {
+func (b *Board) GetTokenBy(symbol Symbol) []Coordinate {
 	var coordinates []Coordinate
 	for i := boardInterval.Min(); i <= boardInterval.Max(); i++ {
 		for j := boardInterval.Min(); j <= boardInterval.Max(); j++ {
@@ -70,7 +70,7 @@ func (b *Board) FullBoard() bool {
 	return true
 }
 
-func (b *Board) IsOccupiedCellBy(coor Coordinate, symbol SymbolPlayerCurrent) bool {
+func (b *Board) IsOccupiedCellBy(coor Coordinate, symbol Symbol) bool {
 	return b.board[coor.row][coor.col] == symbol
 }
 
